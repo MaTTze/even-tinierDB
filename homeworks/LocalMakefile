@@ -1,0 +1,11 @@
+bin/homework1-1a$(EXEEXT): bin/homeworks/homework1-1a.o $(obj)
+	$(BUILDEXE)
+
+bin/homework1-1b$(EXEEXT): bin/homeworks/homework1-1b.o $(obj)
+	$(BUILDEXE)
+
+	$(BUILDEXE)
+
+
+# Alias for all examples
+homeworks_bin: bin/homework1-1a$(EXEEXT) bin/homework1-1b$(EXEEXT)

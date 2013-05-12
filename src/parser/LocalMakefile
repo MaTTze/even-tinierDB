@@ -1,0 +1,4 @@
+obj_parser:=					\
+	bin/parser/Parser.o			\
+	bin/parser/Query.o
+
