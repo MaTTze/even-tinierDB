@@ -1,7 +1,7 @@
 include src/operator/LocalMakefile
 include src/parser/LocalMakefile
 
-obj:=bin/Database.o bin/Register.o bin/Table.o bin/Attribute.o $(obj_operator) # $(obj_parser)
+obj:=bin/Database.o bin/Register.o bin/Table.o bin/Attribute.o $(obj_operator) $(obj_parser)
 
 bin/admin$(EXEEXT): bin/Admin.o $(obj)
 	$(BUILDEXE)

@@ -4,8 +4,9 @@ bin/homework1-1a$(EXEEXT): bin/homeworks/homework1-1a.o $(obj)
 bin/homework1-1b$(EXEEXT): bin/homeworks/homework1-1b.o $(obj)
 	$(BUILDEXE)
 
+bin/homework1-2$(EXEEXT): bin/homeworks/homework1-2.o $(obj)
 	$(BUILDEXE)
 
 
 # Alias for all examples
-homeworks_bin: bin/homework1-1a$(EXEEXT) bin/homework1-1b$(EXEEXT)
+homeworks_bin: bin/homework1-1a$(EXEEXT) bin/homework1-1b$(EXEEXT) bin/homework1-2$(EXEEXT)

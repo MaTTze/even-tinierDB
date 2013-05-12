@@ -18,10 +18,12 @@ public:
    Query parse(std::string query);
 
 private:
-   int findKeyword(std::string&,std::string);
+   size_t findKeyword(std::string&,std::string);
    void parseSelections(std::string&, Query&);
    void parseRelations(std::string&, Query&);
    void parseJoinconditions(std::string&, Query&);
+   bool checkRelation(std::string&);
+   bool checkAttribute(std::string, std::string&, Query&);
 
    Database* db;
 };
