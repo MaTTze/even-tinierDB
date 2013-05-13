@@ -32,12 +32,12 @@ Query Parser::parse(std::string query)
       std::cout << "Invalid Input" << std::endl;
       exit(0);
    }
-   std::string selections = query.substr(selectPos+6,fromPos-selectPos-6);
-   std::string relations = query.substr(fromPos+4,wherePos-fromPos-4);
-   std::string joinconditions = query.substr(wherePos+5);
-   parseRelations(relations, q);
-   parseSelections(selections, q);
-   parseJoinconditions(joinconditions, q);
+   std::string selectClause = query.substr(selectPos+6,fromPos-selectPos-6);
+   std::string fromClause = query.substr(fromPos+4,wherePos-fromPos-4);
+   std::string whereClause = query.substr(wherePos+5);
+   parseFromClause(fromClause, q);
+   parseSelectClause(selectClause, q);
+   parseWhereClause(whereClause, q);
    return q;
 }
 
@@ -47,7 +47,7 @@ size_t Parser::findKeyword(std::string& query, std::string keyword)
    return query.find(keyword);
 }
 
-void Parser::parseRelations(std::string& query, Query& result)
+void Parser::parseFromClause(std::string& query, Query& result)
 {
    size_t pos = -1;
    size_t first = 0;
@@ -71,21 +71,8 @@ void Parser::parseRelations(std::string& query, Query& result)
    } while (!pos == std::string::npos);
 }
 
-void Parser::parseSelections(std::string& query, Query& result)
+void Parser::parseSelectClause(std::string& query, Query& result)
 {
-   //if (query.find("*") != std::string::npos){
-   //   return;
-   //}
-   //unsigned pos = -1;
-   //unsigned first = 0;
-   //std::string tmp;
-   //do {
-   //   first = pos+1;
-   //   pos = query.find(",");
-   //   tmp = query.substr(first, pos-first);
-   //   checkAttribute(tmp);
-   //   result.addSelection(tmp);
-   //} while (!pos == std::string::npos);
 	if (query.find("*") != std::string::npos){
 	   return;
 	}
@@ -107,11 +94,11 @@ void Parser::parseSelections(std::string& query, Query& result)
 	 	  std::cout << "Attribute " << binding << "." << attribute << " doesn't exist!" << std::endl;
 	 	  exit(0);
 	   }
-	   result.addSelection(binding, attribute);
+	   result.addProjection(binding, attribute);
 	} while (!pos == std::string::npos);
 }
 
-void Parser::parseJoinconditions(std::string& query, Query& result)
+void Parser::parseWhereClause(std::string& query, Query& result)
 {
 	size_t pos = -1;
 	size_t first = 0;
@@ -139,10 +126,10 @@ void Parser::parseJoinconditions(std::string& query, Query& result)
 		}
 		dot = right.find(".");
 		if (dot == std::string::npos){
-			result.addPredicate(binding1, attribute1, right);
+			result.addSelection(binding1, attribute1, right);
 		}else{
 			if (isdigit(right[0])){
-				result.addPredicate(binding1, attribute1, right);
+				result.addSelection(binding1, attribute1, right);
 			} else {
 				binding2 = right.substr(first, dot-first);
 				binding2 = trim(binding1);

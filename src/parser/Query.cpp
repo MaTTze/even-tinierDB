@@ -7,9 +7,9 @@
 #include "Query.hpp"
 
 
-void Query::addSelection(std::string binding, std::string attribute)
+void Query::addProjection(std::string binding, std::string attribute)
 {
-	selections.push_back(std::make_pair(binding ,attribute));
+	projections.push_back(std::make_pair(binding ,attribute));
 }
 
 
@@ -36,8 +36,8 @@ bool Query::checkBinding(std::string& binding) {
 	return relations.find(binding)!=relations.end();
 }
 
-void Query::addPredicate(std::string binding, std::string attribute, std::string constant) {
-	predicates.push_back(std::make_pair(std::make_pair(binding, attribute), constant));
+void Query::addSelection(std::string binding, std::string attribute, std::string constant) {
+	selections.push_back(std::make_pair(std::make_pair(binding, attribute), constant));
 }
 
 std::string Query::getRelation(std::string& binding) {
