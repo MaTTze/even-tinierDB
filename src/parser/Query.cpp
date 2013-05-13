@@ -9,14 +9,16 @@
 
 void Query::addProjection(std::string binding, std::string attribute)
 {
-	projections[binding].insert(attribute);
+	unsigned bind = getRelation(binding);
+	projections[bind].insert(attribute);
 }
 
 
 
 void Query::addRelation(std::string rel, std::string binding)
 {
-	relations.insert(std::make_pair(binding, rel));
+	bindings.insert(std::make_pair(binding, relations.size()));
+	relations.push_back(rel);
 }
 
 
@@ -27,8 +29,10 @@ Query::Query()
 
 
 
-void Query::addJoincondition(std::string bind1, std::string att1, std::string bind2, std::string att2)
+void Query::addJoincondition(std::string binding1, std::string att1, std::string binding2, std::string att2)
 {
+	unsigned bind1 = getRelation(binding1);
+	unsigned bind2 = getRelation(binding2);
 	if (bind1 == bind2) {
 		if (att1>att2){ // same binding -> sort attributes
 				std::string swap = att2;
@@ -36,26 +40,30 @@ void Query::addJoincondition(std::string bind1, std::string att1, std::string bi
 				att1 = swap;
 		}
 	} else if (bind1>bind2){ // sort bindings
-		std::string swap = bind2;
+		unsigned swap_unsigned = bind2;
 		bind2 = bind1;
-		bind1 = swap;
-		swap = att2;
+		bind1 = swap_unsigned;
+		std::string swap_string = att2;
 		att2 = att1;
-		att1 = swap;
+		att1 = swap_string;
 	}
 
 	joinconditions[std::make_pair(bind1, bind2)].insert(std::make_pair(att1, att2));
 }
 
 bool Query::checkBinding(std::string& binding) {
-	return relations.find(binding)!=relations.end();
+	return bindings.find(binding)!=bindings.end();
 }
 
 void Query::addSelection(std::string binding, std::string attribute, std::string constant) {
-	selections[binding].insert(std::make_pair(attribute, constant));
+	unsigned bind = getRelation(binding);
+	selections[bind].insert(std::make_pair(attribute, constant));
 }
 
-std::string Query::getRelation(std::string& binding) {
-	std::string tmp = relations.find(binding)->second;
-	return tmp;
+unsigned Query::getRelation(std::string& binding) {
+	return bindings.find(binding)->second;
+}
+
+std::string Query::getRelationName(std::string& binding) {
+	return relations[bindings.find(binding)->second];
 }

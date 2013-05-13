@@ -21,16 +21,18 @@ public:
    void addJoincondition(std::string,std::string,std::string,std::string);
    void addSelection(std::string,std::string,std::string);
    bool checkBinding(std::string&);
-   std::string getRelation(std::string&);
+   unsigned getRelation(std::string&);
+   std::string getRelationName(std::string&);
 
 private:
 
-   std::unordered_map<std::string,std::string> relations;
-   std::unordered_map<std::string,std::unordered_set<std::string> > projections;
+   std::unordered_map<std::string,unsigned> bindings;
+   std::vector<std::string> relations;
+   std::unordered_map<unsigned,std::unordered_set<std::string> > projections;
    //std::vector<std::pair<std::pair<std::string,std::string>,std::pair<std::string,std::string> > > joinconditions;
-   std::map<std::pair<std::string,std::string>, std::set<std::pair<std::string,std::string> > > joinconditions; //not unordered to avoid hash<pair> problematic
+   std::map<std::pair<unsigned,unsigned>, std::set<std::pair<std::string,std::string> > > joinconditions; //not unordered to avoid hash<pair> problematic
    //std::vector<std::pair<std::pair<std::string,std::string>, std::string> > selections;
-   std::unordered_map<std::string,std::unordered_map<std::string,std::string> > selections;
+   std::unordered_map<unsigned,std::unordered_map<std::string,std::string> > selections;
 };
 
 #endif /* QUERY_HPP_ */

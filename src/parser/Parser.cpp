@@ -135,7 +135,7 @@ void Parser::parseWhereClause(std::string& query, Query& result)
 				binding2 = trim(binding1);
 				attribute2 = right.substr(dot+1, pos-dot-1);
 				attribute2 = trim(attribute2);
-				if (!(result.checkBinding(binding2) && checkAttribute(result.getRelation(binding2), attribute2, result))){
+				if (!(result.checkBinding(binding2) && checkAttribute(binding2, attribute2, result))){
 					std::cout << "Attribute " << binding2 << "." << attribute2 << " doesn't exist!" << std::endl;
 					exit(0);
 				}
@@ -150,5 +150,5 @@ bool Parser::checkRelation(std::string& rel) {
 }
 
 bool Parser::checkAttribute(std::string binding, std::string& attribute, Query& result) {
-	return (db->getTable(result.getRelation(binding)).findAttribute(attribute) >= 0);
+	return (db->getTable(result.getRelationName(binding)).findAttribute(attribute) >= 0);
 }
