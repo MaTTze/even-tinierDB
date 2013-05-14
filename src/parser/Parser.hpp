@@ -22,7 +22,9 @@ private:
    void parseSelectClause(std::string&, Query&);
    void parseFromClause(std::string&, Query&);
    void parseWhereClause(std::string&, Query&);
+   /// check if relation exists in DB
    bool checkRelation(std::string&);
+   /// check if attribute exists in relation
    bool checkAttribute(std::string, std::string&, Query&);
 
    Database* db;

@@ -74,7 +74,8 @@ void Parser::parseFromClause(std::string& query, Query& result)
 void Parser::parseSelectClause(std::string& query, Query& result)
 {
 	if (query.find("*") != std::string::npos){
-	   return;
+		// empty projections-map implies "return everything" -> nothing to do
+		return;
 	}
 	size_t pos = -1;
 	size_t first = 0;

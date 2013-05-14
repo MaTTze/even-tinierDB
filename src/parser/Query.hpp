@@ -20,18 +20,24 @@ public:
    void addProjection(std::string, std::string);
    void addJoincondition(std::string,std::string,std::string,std::string);
    void addSelection(std::string,std::string,std::string);
+   /// check existence of binding
    bool checkBinding(std::string&);
+   /// return the unsigned representation for binding
    unsigned getRelation(std::string&);
+   /// return the table name for binding
    std::string getRelationName(std::string&);
 
 private:
 
+   /// bindings and their unsigned representation
    std::unordered_map<std::string,unsigned> bindings;
+   /// corresponding tablenames
    std::vector<std::string> relations;
+   /// binding.attribute from select clause
    std::unordered_map<unsigned,std::unordered_set<std::string> > projections;
-   //std::vector<std::pair<std::pair<std::string,std::string>,std::pair<std::string,std::string> > > joinconditions;
+   /// bind1.att1=bind2.att2 from where clause
    std::map<std::pair<unsigned,unsigned>, std::set<std::pair<std::string,std::string> > > joinconditions; //not unordered to avoid hash<pair> problematic
-   //std::vector<std::pair<std::pair<std::string,std::string>, std::string> > selections;
+   /// binding.attribute=constant from where clause
    std::unordered_map<unsigned,std::unordered_map<std::string,std::string> > selections;
 };
 

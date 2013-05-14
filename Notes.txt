@@ -1,0 +1,4 @@
+Parser:
+	- case sensitiv
+	- select clause: only "binding.attribute" (or *) allowed
+	- constants of type string not handled well 

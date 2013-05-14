@@ -1,0 +1,10 @@
+QueryCompiler:
+
+                --------                 --------------
+	string --> | Parser | --> Query --> | Compiler {a} | --> execution plan (tree?)
+                --------                 --------------
+ 
+  {a}:
+               ---------------------               --------------
+  	Query --> |canonical translation| --> AST --> | Optimizer(s) | --> exec. plan
+  	           ---------------------               --------------
