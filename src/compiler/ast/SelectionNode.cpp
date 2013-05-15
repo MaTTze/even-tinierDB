@@ -10,10 +10,11 @@ ASTNode::Type SelectionNode::getType() {
 	return ASTNode::Type::Selection;
 }
 
-SelectionNode::SelectionNode(ASTNode* n, std::string f, std::string s, bool c) {
+SelectionNode::SelectionNode(ASTNode* n, unsigned b, std::string a, std::string r, bool c) {
 	child = n;
-	first = f;
-	second = s;
+	binding = b;
+	attribute = a;
+	right = r;
 	constant = c;
 }
 
@@ -21,12 +22,16 @@ ASTNode* SelectionNode::getChild() {
 	return child;
 }
 
-std::string SelectionNode::getFirst() {
-	return first;
+std::string SelectionNode::getBinding() {
+	return binding;
 }
 
-std::string SelectionNode::getSecond() {
-	return second;
+std::string SelectionNode::getAttribute() {
+	return attribute;
+}
+
+std::string SelectionNode::getRight() {
+	return right;
 }
 
 bool SelectionNode::isConstant() {

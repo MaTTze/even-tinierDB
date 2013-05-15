@@ -10,7 +10,7 @@ SimpleExecutor::SimpleExecutor(ASTNode* root, Query query, Database* db): tree(r
 }
 
 void SimpleExecutor::execute() {
-	Printer out(move(executeNode(root)));
+	Printer out(std::move(executeNode(tree)));
 
 	out.open();
 	while (out.next());
@@ -18,7 +18,7 @@ void SimpleExecutor::execute() {
 
 }
 
-Operator* SimpleExecutor::executeNode(ASTNode* node) {
+std::unique_ptr<Operator> SimpleExecutor::executeNode(ASTNode* node) {
 	switch (node->getType()){
 		case ASTNode::Type::Tablescan:
 			return executeTablescan(dynamic_cast<TablescanNode*>(node));
@@ -35,4 +35,26 @@ Operator* SimpleExecutor::executeNode(ASTNode* node) {
 		default:
 			break;
 		}
+}
+
+std::unique_ptr<Operator> SimpleExecutor::executeTablescan(TablescanNode* n) {
+	Table& t = db->getTable(n->getTableName());
+	std::unique_ptr<Operator> s(new Tablescan(t));
+
+	tablescans.push_back(s);
+
+   	return s;
+}
+
+std::unique_ptr<Operator> SimpleExecutor::executeSelection(SelectionNode* n) {
+	return new unique_ptr<Operator>();
+}
+
+std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
+
+}
+
+std::unique_ptr<Operator> SimpleExecutor::executeProjection(ProjectionNode* n) {
+
+   	return new Operator();
 }

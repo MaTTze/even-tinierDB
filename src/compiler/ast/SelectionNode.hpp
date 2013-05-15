@@ -14,17 +14,19 @@
 class SelectionNode: public ASTNode {
 public:
 	ASTNode::Type getType();
-	SelectionNode(ASTNode*, std::string, std::string, bool);
+	SelectionNode(ASTNode*, unsigned, std::string, std::string, bool);
 	ASTNode* getChild();
-	std::string getFirst();
-	std::string getSecond();
+	std::string getBinding();
+	std::string getAttribute();
+	std::string getRight();
 	bool isConstant();
 	
 private:
 	ASTNode* child;
-	std::string first;
+	unsigned binding;
+	std::string attribute;
+	std::string right;
 	bool constant;
-	std::string second;
 };
 
 
