@@ -55,20 +55,20 @@ void Parser::parseFromClause(std::string& query, Query& result)
    std::string tmp, rel, binding;
    do {
       first = pos+1;
-      pos = query.find(",");
+      pos = query.find(",",first);
       tmp = query.substr(first, pos-first);
       tmp = trim(tmp);
       space = tmp.find(" ");
-      rel = tmp.substr(first, space-first);
+      rel = tmp.substr(0, space);
       rel = trim(rel);
-      binding = tmp.substr(space+1, pos-space-1);
+      binding = tmp.substr(space+1);
       binding = trim(binding);
       if (!checkRelation(rel)){
     	  std::cout << "Relation " << rel << " doesn't exist!";
     	  exit(0);
       }
       result.addRelation(rel, binding);
-   } while (!pos == std::string::npos);
+   } while (pos != std::string::npos);
 }
 
 void Parser::parseSelectClause(std::string& query, Query& result)
@@ -83,43 +83,43 @@ void Parser::parseSelectClause(std::string& query, Query& result)
 	std::string tmp, attribute, binding;
 	do {
 	   first = pos+1;
-	   pos = query.find(",");
+	   pos = query.find(",",first);
 	   tmp = query.substr(first, pos-first);
 	   tmp = trim(tmp);
 	   dot = tmp.find(".");
-	   binding = tmp.substr(first, dot-first);
+	   binding = tmp.substr(0, dot);
 	   binding = trim(binding);
-	   attribute = tmp.substr(dot+1, pos-dot-1);
+	   attribute = tmp.substr(dot+1);
 	   attribute = trim(attribute);
 	   if (!(result.checkBinding(binding) && checkAttribute(binding, attribute, result))){
 	 	  std::cout << "Attribute " << binding << "." << attribute << " doesn't exist!" << std::endl;
 	 	  exit(0);
 	   }
 	   result.addProjection(binding, attribute);
-	} while (!pos == std::string::npos);
+	} while (pos != std::string::npos);
 }
 
 void Parser::parseWhereClause(std::string& query, Query& result)
 {
-	size_t pos = -1;
+	size_t pos = -5;
 	size_t first = 0;
 	size_t equals = 0;
 	size_t dot = 0;
 	std::string tmp, left, right, binding1, attribute1, binding2, attribute2;
 	do {
-		first = pos+1;
-		pos = query.find(" and ");
+		first = pos+5;
+		pos = query.find(" and ", first);
 		tmp = query.substr(first, pos-first);
 		tmp = trim(tmp);
 		equals = tmp.find("=");
-		left = tmp.substr(first, equals-first);
+		left = tmp.substr(0, equals);
 		left = trim(left);
-		right = tmp.substr(equals+1, pos-equals-1);
+		right = tmp.substr(equals+1);
 		right = trim(right);
 		dot = left.find(".");
-		binding1 = left.substr(first, dot-first);
+		binding1 = left.substr(0, dot);
 		binding1 = trim(binding1);
-		attribute1 = left.substr(dot+1, pos-dot-1);
+		attribute1 = left.substr(dot+1);
 		attribute1 = trim(attribute1);
 		if (!(result.checkBinding(binding1) && checkAttribute(binding1, attribute1, result))){
 			std::cout << "Attribute " << binding1 << "." << attribute1 << " doesn't exist!" << std::endl;
@@ -132,9 +132,9 @@ void Parser::parseWhereClause(std::string& query, Query& result)
 			if (isdigit(right[0])){
 				result.addSelection(binding1, attribute1, right);
 			} else {
-				binding2 = right.substr(first, dot-first);
-				binding2 = trim(binding1);
-				attribute2 = right.substr(dot+1, pos-dot-1);
+				binding2 = right.substr(0, dot);
+				binding2 = trim(binding2);
+				attribute2 = right.substr(dot+1);
 				attribute2 = trim(attribute2);
 				if (!(result.checkBinding(binding2) && checkAttribute(binding2, attribute2, result))){
 					std::cout << "Attribute " << binding2 << "." << attribute2 << " doesn't exist!" << std::endl;
@@ -143,7 +143,7 @@ void Parser::parseWhereClause(std::string& query, Query& result)
 				result.addJoincondition(binding1,attribute1, binding2, attribute2);
 			}
 		}
-	} while (!pos == std::string::npos);
+	} while (pos != std::string::npos);
 }
 
 bool Parser::checkRelation(std::string& rel) {

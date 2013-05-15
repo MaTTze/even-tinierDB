@@ -3,6 +3,7 @@ obj_ast:=					\
 	bin/compiler/ast/JoinNode.o			\
 	bin/compiler/ast/TablescanNode.o			\
 	bin/compiler/ast/SelectionNode.o			\
-	bin/compiler/ast/ProjectionNode.o			
+	bin/compiler/ast/ProjectionNode.o			\
+	bin/compiler/ast/ASTPrinter.o
 	
 

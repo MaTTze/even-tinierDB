@@ -10,7 +10,8 @@
 #include "ASTNode.hpp"
 
 class ASTPrinter {
-	static print(ASTNode*);
+public:
+	static void print(ASTNode*, unsigned);
 
 };
 
