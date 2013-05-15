@@ -6,8 +6,8 @@
  */
 #include "ASTNode.hpp"
 
-Type SelectionNode::getType() {
-
+ASTNode::Type SelectionNode::getType() {
+	return ASTNode::Type::Selection;
 }
 
 SelectionNode::SelectionNode(TablescanNode* n, std::string f, std::string s, bool c) {

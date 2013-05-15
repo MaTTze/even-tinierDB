@@ -6,8 +6,8 @@
  */
 #include "ASTNode.hpp"
 
-	Type ProjectionNode::getType() {
-
+	ASTNode::Type ProjectionNode::getType() {
+		return ASTNode::Type::Projection;
 	}
 
 	ASTNode* ProjectionNode::getChild() {
@@ -22,6 +22,6 @@
 		child = c;
 	}
 
-	void ProjectionNode::addProjection(unsigned x ,std::unordered_set<std::string> y) {
-
+	void ProjectionNode::addProjection(unsigned id ,std::unordered_set<std::string> att) {
+		projections.insert(std::make_pair(id, att));
 	}

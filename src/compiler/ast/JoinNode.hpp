@@ -10,11 +10,11 @@
 
 class JoinNode:ASTNode {
 public:
-	Type getType();
+	ASTNode::Type getType();
 	ASTNode* getRight();
 	ASTNode* getLeft();
 	void setRight(ASTNode*);
-	void serLeft(ASTNode*);
+	void setLeft(ASTNode*);
 	std::map<std::pair<unsigned,unsigned>, std::set<std::pair<std::string,std::string>>> getConditions();
 	void addCondition(std::pair<unsigned,unsigned>, std::set<std::pair<std::string,std::string>>);
 private:

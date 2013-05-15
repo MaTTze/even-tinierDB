@@ -13,7 +13,7 @@
 
 class SelectionNode:ASTNode {
 public:
-	Type getType();
+	ASTNode::Type getType();
 	SelectionNode(TablescanNode*, std::string, std::string, bool);
 	TablescanNode* getChild();
 	std::string getFirst();

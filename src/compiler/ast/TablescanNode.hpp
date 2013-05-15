@@ -12,7 +12,7 @@
 
 class TablescanNode:ASTNode {
 public:
-	Type getType();
+	ASTNode::Type getType();
 	TablescanNode(std::string tablename, unsigned relation);
 	std::string getTableName();
 	unsigned getRelation();

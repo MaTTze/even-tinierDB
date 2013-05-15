@@ -6,8 +6,8 @@
  */
 #include "ASTNode.hpp"
 
-Type JoinNode::getType() {
-
+ASTNode::Type JoinNode::getType() {
+	return ASTNode::Type::Join;
 }
 
 ASTNode* JoinNode::getRight() {
@@ -30,6 +30,6 @@ void JoinNode::setLeft(ASTNode* l) {
 	left = l;
 }
 
-void JoinNode::addCondition(std::pair<unsigned,unsigned> x, std::set<std::pair<std::string,std::string>> condition) {
-	joinconditions.insert(condition);
+void JoinNode::addCondition(std::pair<unsigned,unsigned> bindings, std::set<std::pair<std::string,std::string>> condition) {
+	joinconditions.insert(std::make_pair(bindings, condition));
 }

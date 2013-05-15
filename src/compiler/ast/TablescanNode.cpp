@@ -6,8 +6,8 @@
  */
 
 
-Type TablescanNode::getType() {
-
+ASTNode::Type TablescanNode::getType() {
+	return ASTNode::Type::Tablescan;
 }
 
 TablescanNode::TablescanNode(std::string t, unsigned r) {
