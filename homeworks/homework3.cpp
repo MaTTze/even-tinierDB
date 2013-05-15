@@ -14,10 +14,11 @@ int main()
    db.open("data/uni");
    Parser p = Parser(&db);
    SimpleCompiler c = SimpleCompiler();
-   std::string qry = "select * from studenten s where s.name=Schopenhauer";
-   ASTNode* ASTRoot = c.compile(p.parse(qry));
+   std::string qry = "select s.name from studenten s where ";
+   Query query = p.parse(qry);
+   ASTNode* ASTRoot = c.compile(query);
    ASTPrinter::print(ASTRoot,0);
-   SimpleExecutor e = SimpleExecutor(ASTRoot, p.parse(qry) ,&db);
+   SimpleExecutor e = SimpleExecutor(ASTRoot, query ,&db);
    e.execute();
 }
 //---------------------------------------------------------------------------

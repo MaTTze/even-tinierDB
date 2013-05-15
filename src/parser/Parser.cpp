@@ -111,6 +111,9 @@ void Parser::parseWhereClause(std::string& query, Query& result)
 		pos = query.find(" and ", first);
 		tmp = query.substr(first, pos-first);
 		tmp = trim(tmp);
+		if (tmp == ""){
+			return;
+		}
 		equals = tmp.find("=");
 		left = tmp.substr(0, equals);
 		left = trim(left);
