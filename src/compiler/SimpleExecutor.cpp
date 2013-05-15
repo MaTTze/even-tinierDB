@@ -35,6 +35,7 @@ std::unique_ptr<Operator> SimpleExecutor::executeNode(ASTNode* node) {
 		default:
 			break;
 		}
+	return std::move(std::unique_ptr<Operator>(nullptr));
 }
 
 std::unique_ptr<Operator> SimpleExecutor::executeTablescan(TablescanNode* n) {
@@ -42,7 +43,7 @@ std::unique_ptr<Operator> SimpleExecutor::executeTablescan(TablescanNode* n) {
 	std::unique_ptr<Operator> s(new Tablescan(t));
 
 	tablescans.push_back(dynamic_cast<Tablescan*>(s.get()));
-std::cout << "Tablescan" << std::endl;
+	std::cout << "Tablescan" << std::endl;
 	return std::move(s);
 }
 
@@ -50,23 +51,33 @@ std::unique_ptr<Operator> SimpleExecutor::executeSelection(SelectionNode* n) {
 	std::cout << "Selection" << std::endl;
     std::unique_ptr<Operator> childOp = executeNode(n->getChild());
 
-    std::unique_ptr<Tablescan> scan(tablescans.at(n->getBinding()));
+    Tablescan* scan= tablescans.at(n->getBinding());
 	
     Register condition; setConstantCondition(&condition, n->getBinding(), n->getAttribute(), n->getRight());
     const Register* reg = scan->getOutput(n->getAttribute());
 
-   	std::unique_ptr<Operator> select(new Selection(std::move(scan), reg, &condition));	
+   	std::unique_ptr<Operator> select(new Selection(std::move(childOp), reg, &condition));
 
-    return select;	
+    return std::move(select);
 }
 
 std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
-
+	executeNode(n->getLeft());
+	return executeNode(n->getRight());
 }
 
 std::unique_ptr<Operator> SimpleExecutor::executeProjection(ProjectionNode* n) {
 	std::cout << "Projection" << std::endl;
-	return executeNode(n->getChild());
+	auto projections = n->getProjections();
+	std::vector<const Register*> regs;
+	for (auto it = projections.begin(); it != projections.end();it++){
+		Tablescan* scan= tablescans.at(it->first);
+		for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++){
+			regs.push_back(scan->getOutput(*it2));
+		}
+	}
+	std::unique_ptr<Operator> p (new Projection(std::move(executeNode(n->getChild())),regs));
+	return std::move(p);
 }
 
 void SimpleExecutor::setConstantCondition (Register* condition, unsigned binding, std::string attribute, std::string conditionString) {
