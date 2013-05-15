@@ -22,7 +22,7 @@ ASTNode* SelectionNode::getChild() {
 	return child;
 }
 
-std::string SelectionNode::getBinding() {
+unsigned SelectionNode::getBinding() {
 	return binding;
 }
 

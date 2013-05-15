@@ -41,13 +41,22 @@ std::unique_ptr<Operator> SimpleExecutor::executeTablescan(TablescanNode* n) {
 	Table& t = db->getTable(n->getTableName());
 	std::unique_ptr<Operator> s(new Tablescan(t));
 
-	tablescans.push_back(s);
+	tablescans.push_back(dynamic_cast<Tablescan*>(s.get()));
 
-   	return s;
+	return std::move(s);
 }
 
 std::unique_ptr<Operator> SimpleExecutor::executeSelection(SelectionNode* n) {
-	return new unique_ptr<Operator>();
+    std::unique_ptr<Operator> childOp = executeNode(n->getChild());
+
+    std::unique_ptr<Tablescan> scan(tablescans.at(n->getBinding()));
+	
+    Register condition; setConstantCondition(&condition, n->getBinding(), n->getAttribute(), n->getRight());
+    const Register* reg = scan->getOutput(n->getAttribute());
+
+   	std::unique_ptr<Operator> select(new Selection(std::move(scan), reg, &condition));	
+
+    return select;	
 }
 
 std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
@@ -56,5 +65,28 @@ std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 
 std::unique_ptr<Operator> SimpleExecutor::executeProjection(ProjectionNode* n) {
 
-   	return new Operator();
+}
+
+void SimpleExecutor::setConstantCondition (Register* condition, unsigned binding, std::string attribute, std::string conditionString) {
+	std::string tableName = query.getRelations().at(binding);
+	Table& t = db->getTable(tableName);
+	const Attribute a = t.getAttribute(t.findAttribute(attribute));
+
+	switch(a.getType()) {
+      case Attribute::Type::Int:
+        condition->setInt(atoi(conditionString.c_str()));
+        break;
+      case Attribute::Type::Double:
+        condition->setDouble(atof(conditionString.c_str()));
+        break;
+      case Attribute::Type::Bool:
+        if(conditionString == "true")
+          condition->setBool(true);
+        else if (conditionString == "false")
+          condition->setBool(false);
+        break;
+      case Attribute::Type::String:
+        condition->setString(conditionString);
+        break;
+    }
 }

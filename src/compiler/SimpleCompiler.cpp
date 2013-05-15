@@ -34,7 +34,7 @@ void SimpleCompiler::generateSelections() {
 		unsigned rel = it->first;
 		auto list = it->second;
 		for (auto it2 = list.begin(); it2 != list.end(); it2++){
-			ASTNode* tmp = new SelectionNode(relations[rel], it2->first, it2->second, true);
+			ASTNode* tmp = new SelectionNode(relations[rel], rel, it2->first, it2->second, true);
 			relations[rel]->setParent(tmp);
 			relations[rel] = tmp;
 		}
@@ -45,7 +45,7 @@ void SimpleCompiler::generateSelections() {
 		if (it != joinconditions.end()){
 			auto list = it->second;
 			for (auto it2 = list.begin(); it2 != list.end(); it2++){
-				ASTNode* tmp = new SelectionNode(relations[i], it2->first, it2->second, true);
+				ASTNode* tmp = new SelectionNode(relations[i], i, it2->first, it2->second, true);
 				relations[i]->setParent(tmp);
 				relations[i] = tmp;
 			}

@@ -16,7 +16,7 @@ public:
 	ASTNode::Type getType();
 	SelectionNode(ASTNode*, unsigned, std::string, std::string, bool);
 	ASTNode* getChild();
-	std::string getBinding();
+	unsigned getBinding();
 	std::string getAttribute();
 	std::string getRight();
 	bool isConstant();
