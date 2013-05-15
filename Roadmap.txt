@@ -5,6 +5,11 @@ QueryCompiler:
                 --------                 --------------
  
   {a}:
-               ---------------------               --------------
-  	Query --> |canonical translation| --> AST --> | Optimizer(s) | --> exec. plan
-  	           ---------------------               --------------
+               -----------------------               --------------
+  	Query --> | canonical translation | --> AST --> | Optimizer(s) | --> exec. plan
+  	           -----------------------               --------------
+   or
+               --                      ---------------               --
+    Query --> |  | --> QueryGraph --> | join ordering | --> AST --> |  | --> exec. plan
+  	           --                      ---------------               --
+  	           

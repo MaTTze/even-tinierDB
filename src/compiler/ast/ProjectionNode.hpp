@@ -1,0 +1,26 @@
+/*
+ * SelectionNode.hpp
+ *
+ *  Created on: May 14, 2013
+ *      Author: matthias
+ */
+
+#ifndef PROJECTIONNODE_HPP_
+#define PROJECTIONNODE_HPP_
+
+#include "ASTNode.hpp"
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+
+class ProjectionNode:ASTNode {
+public:
+	Type getType();
+private:
+	ASTNode* child;
+	ASTNode* parent;
+	std::unordered_map<unsigned,std::unordered_set<std::string> > projections;
+};
+
+
+#endif /* SELECTIONNODE_HPP_ */

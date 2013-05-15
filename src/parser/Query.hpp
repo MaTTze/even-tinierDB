@@ -27,6 +27,13 @@ public:
    /// return the table name for binding
    std::string getRelationName(std::string&);
 
+	std::unordered_map<std::string, unsigned> getBindings() const;
+	const std::map<std::pair<unsigned, unsigned>,
+			std::set<std::pair<std::string, std::string> > >& getJoinconditions() const;
+	std::unordered_map<unsigned, std::unordered_set<std::string> > getProjections() const;
+	const std::vector<std::string>& getRelations() const;
+	std::unordered_map<unsigned, std::unordered_map<std::string, std::string> > getSelections() const;
+
 private:
 
    /// bindings and their unsigned representation

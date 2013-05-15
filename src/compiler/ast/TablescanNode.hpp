@@ -1,0 +1,23 @@
+/*
+ * TablescanNode.hpp
+ *
+ *  Created on: May 14, 2013
+ *      Author: matthias
+ */
+
+#ifndef TABLESCANNODE_HPP_
+#define TABLESCANNODE_HPP_
+#include "ASTNode.hpp"
+#include <string>
+
+class TablescanNode:ASTNode {
+public:
+	Type getType();
+	TablescanNode(std::string tablename, unsigned relation);
+private:
+	unsigned relation;
+	std::string tableName;
+};
+
+
+#endif /* TABLESCANNODE_HPP_ */

@@ -39,7 +39,7 @@ void Query::addJoincondition(std::string binding1, std::string att1, std::string
 				att2 = att1;
 				att1 = swap;
 		}
-	} else if (bind1>bind2){ // sort bindings
+	} else if (bind1<bind2){ // sort binding
 		unsigned swap_unsigned = bind2;
 		bind2 = bind1;
 		bind1 = swap_unsigned;
@@ -66,4 +66,24 @@ unsigned Query::getRelation(std::string& binding) {
 
 std::string Query::getRelationName(std::string& binding) {
 	return relations[bindings.find(binding)->second];
+}
+
+std::unordered_map<std::string, unsigned> Query::getBindings() const {
+	return bindings;
+}
+
+const std::map<std::pair<unsigned, unsigned>,std::set<std::pair<std::string, std::string> > >& Query::getJoinconditions() const {
+	return joinconditions;
+}
+
+std::unordered_map<unsigned, std::unordered_set<std::string> > Query::getProjections() const {
+	return projections;
+}
+
+const std::vector<std::string>& Query::getRelations() const {
+	return relations;
+}
+
+std::unordered_map<unsigned, std::unordered_map<std::string, std::string> > Query::getSelections() const {
+	return selections;
 }

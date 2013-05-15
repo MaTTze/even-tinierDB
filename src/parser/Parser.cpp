@@ -28,7 +28,7 @@ Query Parser::parse(std::string query)
    size_t selectPos = findKeyword(query, std::string("select"));
    size_t fromPos = findKeyword(query, std::string("from"));
    size_t wherePos = findKeyword(query, std::string("where"));
-   if (selectPos == std::string::npos || selectPos == std::string::npos || selectPos == std::string::npos){
+   if (selectPos == std::string::npos || selectPos == std::string::npos || selectPos == std::string::npos || selectPos > fromPos || fromPos > wherePos){
       std::cout << "Invalid Input" << std::endl;
       exit(0);
    }
