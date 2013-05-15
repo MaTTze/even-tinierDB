@@ -10,7 +10,7 @@
 #include "ASTNode.hpp"
 #include <string>
 
-class TablescanNode:ASTNode {
+class TablescanNode: public ASTNode {
 public:
 	ASTNode::Type getType();
 	TablescanNode(std::string tablename, unsigned relation);

@@ -9,11 +9,9 @@
 #define AST_HPP_
 #include "ASTNode.hpp"
 
-class AST {
-	ASTNode* get Root();
+class ASTPrinter {
+	static print(ASTNode*);
 
-private:
-	ASTNode* root;
 };
 
 

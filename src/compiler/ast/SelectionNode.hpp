@@ -11,17 +11,17 @@
 #include "ASTNode.hpp"
 #include <string>
 
-class SelectionNode:ASTNode {
+class SelectionNode: public ASTNode {
 public:
 	ASTNode::Type getType();
-	SelectionNode(TablescanNode*, std::string, std::string, bool);
-	TablescanNode* getChild();
+	SelectionNode(ASTNode*, std::string, std::string, bool);
+	ASTNode* getChild();
 	std::string getFirst();
 	std::string getSecond();
 	bool isConstant();
 	
 private:
-	TablescanNode* child;
+	ASTNode* child;
 	std::string first;
 	bool constant;
 	std::string second;

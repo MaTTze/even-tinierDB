@@ -1,10 +1,11 @@
 /*
- * ASTNode.cpp
+ * JoinNode.cpp
  *
  *  Created on: May 15, 2013
  *      Author: matthias
  */
-#include "ASTNode.hpp"
+#include "JoinNode.hpp"
+
 
 ASTNode::Type JoinNode::getType() {
 	return ASTNode::Type::Join;
@@ -28,6 +29,9 @@ void JoinNode::setRight(ASTNode* r) {
 
 void JoinNode::setLeft(ASTNode* l) {
 	left = l;
+}
+
+JoinNode::JoinNode(ASTNode* left, ASTNode* right) :left(left), right(right){
 }
 
 void JoinNode::addCondition(std::pair<unsigned,unsigned> bindings, std::set<std::pair<std::string,std::string>> condition) {

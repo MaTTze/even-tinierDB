@@ -1,23 +1,23 @@
 /*
- * ASTNode.cpp
+ * SelectionNode.cpp
  *
  *  Created on: May 15, 2013
  *      Author: matthias
  */
-#include "ASTNode.hpp"
+#include "SelectionNode.hpp"
 
 ASTNode::Type SelectionNode::getType() {
 	return ASTNode::Type::Selection;
 }
 
-SelectionNode::SelectionNode(TablescanNode* n, std::string f, std::string s, bool c) {
+SelectionNode::SelectionNode(ASTNode* n, std::string f, std::string s, bool c) {
 	child = n;
 	first = f;
 	second = s;
 	constant = c;
 }
 
-TablescanNode* SelectionNode::getChild() {
+ASTNode* SelectionNode::getChild() {
 	return child;
 }
 

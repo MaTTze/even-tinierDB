@@ -4,7 +4,7 @@
  *  Created on: May 15, 2013
  *      Author: matthias
  */
-
+#include "TablescanNode.hpp"
 
 ASTNode::Type TablescanNode::getType() {
 	return ASTNode::Type::Tablescan;

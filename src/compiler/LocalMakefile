@@ -1,0 +1,6 @@
+include src/compiler/ast/LocalMakefile
+
+obj_compiler:=					\
+	bin/compiler/SimpleCompiler.o			\
+	$(obj_ast)
+

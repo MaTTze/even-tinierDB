@@ -1,0 +1,8 @@
+obj_ast:=					\
+	bin/compiler/ast/ASTNode.o			\
+	bin/compiler/ast/JoinNode.o			\
+	bin/compiler/ast/TablescanNode.o			\
+	bin/compiler/ast/SelectionNode.o			\
+	bin/compiler/ast/ProjectionNode.o			
+	
+

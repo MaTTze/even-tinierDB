@@ -21,6 +21,7 @@ private:
 	void generateProjections();
 
 	std::vector<ASTNode*> relations;
+	std::map<std::pair<unsigned,unsigned>, std::set<std::pair<std::string,std::string> > > joinconditions;
 	ASTNode* currentRoot;
 	Query q;
 };

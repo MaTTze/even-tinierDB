@@ -11,7 +11,7 @@
 class ASTNode {
 public:
 	typedef enum {Join, Selection, Tablescan, Projection} Type;
-	Type getType() = 0;
+	virtual Type getType() = 0;
 	ASTNode* getParent();
 	void setParent(ASTNode*);
 private:

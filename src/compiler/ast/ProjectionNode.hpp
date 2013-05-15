@@ -13,9 +13,10 @@
 #include <unordered_map>
 #include <unordered_set>
 
-class ProjectionNode:ASTNode {
+class ProjectionNode: public ASTNode {
 public:
 	ASTNode::Type getType();
+	ProjectionNode(ASTNode*, std::unordered_map<unsigned,std::unordered_set<std::string> >);
 	ASTNode* getChild();
 	std::unordered_map<unsigned,std::unordered_set<std::string>> getProjections();
 	void setChild(ASTNode*);

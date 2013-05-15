@@ -7,10 +7,15 @@
 
 #ifndef JOINNODE_HPP_
 #define JOINNODE_HPP_
+#include "ASTNode.hpp"
+#include <map>
+#include <set>
+#include <string>
 
-class JoinNode:ASTNode {
+class JoinNode: public ASTNode {
 public:
 	ASTNode::Type getType();
+	JoinNode(ASTNode*,ASTNode*);
 	ASTNode* getRight();
 	ASTNode* getLeft();
 	void setRight(ASTNode*);
