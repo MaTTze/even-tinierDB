@@ -42,11 +42,12 @@ std::unique_ptr<Operator> SimpleExecutor::executeTablescan(TablescanNode* n) {
 	std::unique_ptr<Operator> s(new Tablescan(t));
 
 	tablescans.push_back(dynamic_cast<Tablescan*>(s.get()));
-
+std::cout << "Tablescan" << std::endl;
 	return std::move(s);
 }
 
 std::unique_ptr<Operator> SimpleExecutor::executeSelection(SelectionNode* n) {
+	std::cout << "Selection" << std::endl;
     std::unique_ptr<Operator> childOp = executeNode(n->getChild());
 
     std::unique_ptr<Tablescan> scan(tablescans.at(n->getBinding()));
@@ -64,7 +65,8 @@ std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 }
 
 std::unique_ptr<Operator> SimpleExecutor::executeProjection(ProjectionNode* n) {
-
+	std::cout << "Projection" << std::endl;
+	return executeNode(n->getChild());
 }
 
 void SimpleExecutor::setConstantCondition (Register* condition, unsigned binding, std::string attribute, std::string conditionString) {
