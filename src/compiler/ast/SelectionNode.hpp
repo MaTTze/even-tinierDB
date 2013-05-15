@@ -14,9 +14,14 @@
 class SelectionNode:ASTNode {
 public:
 	Type getType();
+	SelectionNode(TablescanNode*, std::string, std::string, bool);
+	TablescanNode* getChild();
+	std::string getFirst();
+	std::string getSecond();
+	bool isConstant();
+	
 private:
 	TablescanNode* child;
-	ASTNode* parent;
 	std::string first;
 	bool constant;
 	std::string second;

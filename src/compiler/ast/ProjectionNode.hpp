@@ -16,9 +16,12 @@
 class ProjectionNode:ASTNode {
 public:
 	Type getType();
+	ASTNode* getChild();
+	std::unordered_map<unsigned,std::unordered_set<std::string>> getProjections();
+	void setChild(ASTNode*);
+	void addProjection(unsigned,std::unordered_set<std::string>);
 private:
 	ASTNode* child;
-	ASTNode* parent;
 	std::unordered_map<unsigned,std::unordered_set<std::string> > projections;
 };
 
