@@ -67,9 +67,11 @@ std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 
 	auto joins = n->getConditions();
 
-	bool first = true;
-	std::unique_ptr<Operator> op(nullptr);
+	std::unique_ptr<Operator> op(new CrossProduct(std::move(leftOp),std::move(rightOp)));
 
+	if (joins.empty()){
+		return std::move(op);
+	}
 	for (auto it = joins.begin(); it != joins.end();it++){
 		Tablescan* scanLeft = tablescans.at(it->first.first);
 		Tablescan* scanRight = tablescans.at(it->first.second);
@@ -79,17 +81,10 @@ std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 			const Register* regLeft = scanLeft->getOutput(it2->first);
 			const Register* regRight = scanRight->getOutput(it2->second);
 
-			if(first) {
-				std::unique_ptr<Operator> join(new HashJoin(std::move(leftOp), std::move(rightOp), regLeft, regRight));
-				op(std::move(join));
-				first = false;
-			} else {
-				std::unique_ptr<Operator> select(new Selection(std::move(op), regLeft, regRight));
-				op(std::move(select));
-			}
+			std::unique_ptr<Operator> select(new Selection(std::move(op), regLeft, regRight));
+			op = (std::move(select));
 		}
 	}
-	
 	return std::move(op);
 }
 
