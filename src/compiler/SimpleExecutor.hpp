@@ -19,6 +19,7 @@
 #include "operator/CrossProduct.hpp"
 #include "operator/Selection.hpp"
 #include "operator/Projection.hpp"
+#include "operator/HashJoin.hpp"
 #include "operator/Printer.hpp"
 #include <iostream>
 #include <memory>
