@@ -14,7 +14,7 @@ int main()
    db.open("data/uni");
    Parser p = Parser(&db);
    SimpleCompiler c = SimpleCompiler();
-   std::string qry = "select s.name from studenten s where ";
+   std::string qry = "select s.name, s.matrnr from studenten s where s.matrnr=24002";
    Query query = p.parse(qry);
    ASTNode* ASTRoot = c.compile(query);
    ASTPrinter::print(ASTRoot,0);

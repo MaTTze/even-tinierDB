@@ -53,11 +53,11 @@ std::unique_ptr<Operator> SimpleExecutor::executeSelection(SelectionNode* n) {
 
     Tablescan* scan= tablescans.at(n->getBinding());
 	
-    Register condition; setConstantCondition(&condition, n->getBinding(), n->getAttribute(), n->getRight());
+    Register* condition = new Register(); setConstantCondition(condition, n->getBinding(), n->getAttribute(), n->getRight());
     const Register* reg = scan->getOutput(n->getAttribute());
 
-   	std::unique_ptr<Operator> select(new Selection(std::move(childOp), reg, &condition));
-
+   	std::unique_ptr<Operator> select(new Selection(std::move(childOp), reg, condition));
+   	constantRegisters.push_back(condition);
     return std::move(select);
 }
 

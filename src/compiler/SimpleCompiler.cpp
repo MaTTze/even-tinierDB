@@ -79,7 +79,11 @@ void SimpleCompiler::pushdownSelections() {
 }
 
 void SimpleCompiler::generateProjections() {
-	ASTNode* tmp = new ProjectionNode(currentRoot, q.getProjections());
+	auto projections = q.getProjections();
+	if (projections.empty()){
+		return;
+	}
+	ASTNode* tmp = new ProjectionNode(currentRoot, projections);
 	currentRoot->setParent(tmp);
 	currentRoot = tmp;
 }

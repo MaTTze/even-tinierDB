@@ -21,6 +21,7 @@
 #include "operator/Projection.hpp"
 #include "operator/Printer.hpp"
 #include <iostream>
+#include <memory>
 
 class SimpleExecutor {
 public:
@@ -29,6 +30,7 @@ public:
 
 private:
 	std::vector<Tablescan*> tablescans;
+	std::vector<Register*> constantRegisters;
 	ASTNode* tree;
 	Query query;
 	Database* db;
