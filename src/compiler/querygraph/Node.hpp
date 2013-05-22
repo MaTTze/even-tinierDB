@@ -8,6 +8,7 @@
 #ifndef NODE_HPP_
 #define NODE_HPP_
 #include "Edge.hpp"
+#include "Database.hpp"
 #include <map>
 #include <string>
 

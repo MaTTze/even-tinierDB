@@ -9,14 +9,16 @@
 #define QUERYGRAPH_HPP
 #include "Node.hpp"
 #include "Edge.hpp"
+#include "Database.hpp"
 #include <vector>
 #include <set>
+#include <string>
 
 class QueryGraph {
 public:
-	QueryGrap();
+	QueryGraph(Database* db);
 	void addNode(std::string, unsigned);
-	void addEdge(unsigned, unsigned);
+	void addEdge(std::pair<unsigned, unsigned>, std::set<std::pair<std::string, std::string> >);
 	void addSelection(unsigned, std::string, std::string, bool);
 	Node* getNode(unsigned);
 

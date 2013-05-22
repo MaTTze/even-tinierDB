@@ -1,0 +1,6 @@
+obj_qg:=					\
+	bin/compiler/querygraph/Node.o			\
+	bin/compiler/querygraph/Edge.o			\
+	bin/compiler/querygraph/QueryGraph.o
+	
+

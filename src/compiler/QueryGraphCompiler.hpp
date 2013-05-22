@@ -10,17 +10,22 @@
 
 #include "querygraph/QueryGraph.hpp"
 #include "../parser/Query.hpp"
+#include "Database.hpp"
 
 class QueryGraphCompiler {
 public:
-	QueryGraph compile(Query);
+	QueryGraph* compile(Query);
+	QueryGraphCompiler(Database*);
 private:
 	void generateNodes();
 	void addSelections();
 	void generateEdges();
 
-	QueryGraph qg;
+	QueryGraph* qg;
 	Query q;
+	Database* db;
+	unsigned relations;
+	std::map<std::pair<unsigned,unsigned>, std::set<std::pair<std::string,std::string> > > joinconditions;
 };
 
 

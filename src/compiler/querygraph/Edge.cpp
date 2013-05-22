@@ -4,9 +4,10 @@
  *  Created on: May 22, 2013
  *      Author: matthias
  */
+#include "Edge.hpp"
+#include "QueryGraph.hpp"
 
-
-Edge(Database* db, unsigned binding1, unsigned binding2, std::set<std::pair<std::string, std::string>> joinconditions, QueryGraph* graph) {
+Edge::Edge(Database* db, unsigned binding1, unsigned binding2, std::set<std::pair<std::string, std::string>> joinconditions, QueryGraph* graph) {
 	Table& t1 = db->getTable(graph->getNode(binding1)->getName());
 	Table& t2 = db->getTable(graph->getNode(binding2)->getName());
 
@@ -17,11 +18,11 @@ Edge(Database* db, unsigned binding1, unsigned binding2, std::set<std::pair<std:
 		Attribute a1 = t1.getAttribute(t1.findAttribute(it->first));
 		Attribute a2 = t2.getAttribute(t2.findAttribute(it->second));
 
-		selectivity = selectivity / (std::max(a1.getUniqueValues()), a2.getUniqueValues()));
+		selectivity = selectivity / (std::max(a1.getUniqueValues(), a2.getUniqueValues()));
 	}
 }
 
 
-double getSelectivity() {
+double Edge::getSelectivity() {
 	return selectivity;
 }

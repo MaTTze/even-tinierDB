@@ -1,7 +1,11 @@
 include src/compiler/ast/LocalMakefile
+include src/compiler/querygraph/LocalMakefile
+
 
 obj_compiler:=					\
 	bin/compiler/SimpleCompiler.o			\
 	bin/compiler/SimpleExecutor.o 			\
-	$(obj_ast)
+	bin/compiler/QueryGraphCompiler.o		\
+	$(obj_ast)							\
+	$(obj_qg)
 

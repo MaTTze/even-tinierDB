@@ -4,24 +4,24 @@
  *  Created on: May 22, 2013
  *      Author: matthias
  */
+#include "Node.hpp"
 
-
-Node(Database* database, std::string relName) {
+Node::Node(Database* database, std::string relName) {
 	relationName = relName;
 	db = database;
 
 	baseCardinality = (db->getTable(relationName)).getCardinality();
-	estimatedCardinality = static_cast<double>(cardinality);
+	estimatedCardinality = static_cast<double>(baseCardinality);
 }
 
-void addEdge(unsigned binding, Edge* edge) {
-	edges.insert(std::make_pair(binding, edge))
+void Node::addEdge(unsigned binding, Edge* edge) {
+	edges.insert(std::make_pair(binding, edge));
 }
 
-void addSelection(std::string attribute, std::string constant, bool isConstant) {
+void Node::addSelection(std::string attribute, std::string constant, bool isConstant) {
 	selections.insert(std::make_pair(std::make_pair(attribute, constant), isConstant));
 
-	Table& t = db->getTalbe(relationName);
+	Table& t = db->getTable(relationName);
 	Attribute a1 = t.getAttribute(t.findAttribute(attribute));
 
 	if(isConstant) {
@@ -33,6 +33,6 @@ void addSelection(std::string attribute, std::string constant, bool isConstant) 
 
 }
 
-std::string getRelationName() {
+std::string Node::getName() {
 	return relationName;
 }
