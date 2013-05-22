@@ -6,7 +6,9 @@
  */
 #include "QueryGraph.hpp"
 
-QueryGraph::QueryGraph(Database* db):db(db){}
+QueryGraph::QueryGraph(Database* db, unsigned relations):db(db){
+	nodes.resize(relations);
+}
 
 /*
 	Simply adds a note to the Query Graph.

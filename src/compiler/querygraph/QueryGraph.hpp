@@ -16,7 +16,7 @@
 
 class QueryGraph {
 public:
-	QueryGraph(Database* db);
+	QueryGraph(Database* db, unsigned);
 
 	//Simply adds a note to the Query Graph.
 	void addNode(std::string, unsigned);

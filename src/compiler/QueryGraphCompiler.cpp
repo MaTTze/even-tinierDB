@@ -14,8 +14,8 @@ QueryGraphCompiler::QueryGraphCompiler(Database* db):db(db) {
 
 QueryGraph* QueryGraphCompiler::compile(Query query) {
 	q = query;
-	qg = new QueryGraph(db);
-	relations = 0;
+	relations = q.getRelations().size();
+	qg = new QueryGraph(db, relations);
 	generateNodes();
 	addSelections();
 	generateEdges();
@@ -29,7 +29,6 @@ void QueryGraphCompiler::generateNodes() {
 	auto rel = q.getRelations();
 	for (unsigned i = 0; i < rel.size(); i++) {		//iterate over all relations
 		qg->addNode(rel.at(i), i);		//add a node with its relation's name and corresponding binding
-		relations++;					//dirty fix for amount of relations used in addSelections
 	}
 }
 
