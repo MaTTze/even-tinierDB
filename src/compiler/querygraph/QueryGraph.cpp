@@ -13,7 +13,7 @@ QueryGraph::QueryGraph(Database* db):db(db){}
 */
 void QueryGraph::addNode(std::string relName, unsigned binding) {
 	Node* n = new Node(db, relName);
-	nodes[binding] = n;
+	nodes.at(binding) = n;
 }
 
 /*
@@ -39,4 +39,10 @@ void QueryGraph::addSelection(unsigned binding, std::string attribute, std::stri
 Node* QueryGraph::getNode(unsigned binding) {
 	return nodes.at(binding);
 } 
+
+void QueryGraph::print(){
+	for(unsigned i = 0; i < nodes.size(); i++) {
+		std::cout << nodes.at(i)->getName() << std::endl;
+	}
+}
 

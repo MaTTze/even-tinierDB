@@ -30,6 +30,8 @@ public:
 	//Get a node by its binding.
 	Node* getNode(unsigned);
 
+	void print();
+
 private:
 	Database* db;					//pointer to database to retreive tables and domain sizes
 	std::vector<Node*> nodes;		//all nodes in the Query Graph
