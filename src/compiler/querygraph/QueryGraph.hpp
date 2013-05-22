@@ -17,15 +17,23 @@
 class QueryGraph {
 public:
 	QueryGraph(Database* db);
+
+	//Simply adds a note to the Query Graph.
 	void addNode(std::string, unsigned);
+
+	//Adds an edge to the Query Graph. Estimated selectivity handled in constructor of Edge.
 	void addEdge(std::pair<unsigned, unsigned>, std::set<std::pair<std::string, std::string> >);
+
+	//Adds a selection to a sepecific Node in the Query Graph. Estimation of selectivity is done in Node.
 	void addSelection(unsigned, std::string, std::string, bool);
+
+	//Get a node by its binding.
 	Node* getNode(unsigned);
 
 private:
-	Database* db;
-	std::vector<Node*> nodes;
-	std::vector<Edge*> edges;
+	Database* db;					//pointer to database to retreive tables and domain sizes
+	std::vector<Node*> nodes;		//all nodes in the Query Graph
+	std::vector<Edge*> edges;		//all edges in the Query Graph
 };
 
 

@@ -16,15 +16,17 @@ class QueryGraph;
 class Edge {
 
 public:
+	//Creates a new edge and sets correct estimated selectivity. 
 	Edge(Database*, unsigned, unsigned, std::set<std::pair<std::string, std::string> >, QueryGraph*);
 
+	//Returns the estimated selectivity of this edge.
 	double getSelectivity();
 
 
 private:
-	std::set<std::pair<std::string,std::string>> conditions;
-	double selectivity;
-};
+	std::set<std::pair<std::string,std::string>> conditions;	//the joins this edge is representing in the query graph
+	double selectivity;		//the resulting estimated selectivity of all joins
+};	
 
 
 

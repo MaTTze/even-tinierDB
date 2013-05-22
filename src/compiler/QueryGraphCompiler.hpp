@@ -25,7 +25,7 @@ private:
 	Query q;
 	Database* db;
 	unsigned relations;
-	std::map<std::pair<unsigned,unsigned>, std::set<std::pair<std::string,std::string> > > joinconditions;
+	std::map<std::pair<unsigned,unsigned>, std::set<std::pair<std::string,std::string> > > joinconditions;		//own set of joinconditions, as self-joins will be moved to selections
 };
 
 
