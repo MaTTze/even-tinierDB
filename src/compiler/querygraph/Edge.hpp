@@ -22,6 +22,9 @@ public:
 	//Returns the estimated selectivity of this edge.
 	double getSelectivity();
 
+	//Returns all join conditions on this edge
+	std::set<std::pair<std::string,std::string>> getConditions();
+
 
 private:
 	std::set<std::pair<std::string,std::string>> conditions;	//the joins this edge is representing in the query graph

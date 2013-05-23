@@ -14,7 +14,7 @@ int main()
    Database db;
    db.open("data/uni");
    Parser p = Parser(&db);
-   std::string qry = "select v.titel, v.gelesenvon, p.persnr, p.name from vorlesungen v, professoren p where v.titel=Ethik and v.gelesenvon=p.persnr";
+   std::string qry = "select v.titel, v.gelesenvon, p.persnr, p.name from vorlesungen v, professoren p, hoeren h where v.titel=p.persnr and v.gelesenvon=p.persnr and h.vorlnr = v.vorlnr";
    Query query = p.parse(qry);
    /*
    SimpleCompiler c = SimpleCompiler();
@@ -24,7 +24,7 @@ int main()
    */
    QueryGraphCompiler qgc = QueryGraphCompiler(&db);
    QueryGraph* qg = qgc.compile(query);
-   //qg->print();
+   qg->print();
    //e.execute();
 }
 //---------------------------------------------------------------------------

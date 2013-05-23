@@ -19,9 +19,10 @@ Edge::Edge(Database* db, unsigned binding1, unsigned binding2, std::set<std::pai
 	for(auto it = joinconditions.begin(); it != joinconditions.end(); it++) {
 		Attribute a1 = t1.getAttribute(t1.findAttribute(it->first));
 		Attribute a2 = t2.getAttribute(t2.findAttribute(it->second));
-
 		selectivity = selectivity / (std::max(a1.getUniqueValues(), a2.getUniqueValues()));	//sets estimated selectivity as prior selectivity * selectivity of the join
 	}
+
+	conditions = joinconditions;
 }
 
 /*
@@ -29,4 +30,11 @@ Edge::Edge(Database* db, unsigned binding1, unsigned binding2, std::set<std::pai
 */
 double Edge::getSelectivity() {
 	return selectivity;
+}
+
+/*
+	Returns all join conditions on this edge.
+*/
+std::set<std::pair<std::string,std::string>> Edge::getConditions() {
+	return conditions;
 }

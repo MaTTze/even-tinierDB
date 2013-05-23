@@ -27,6 +27,9 @@ public:
 	//Get the name of the relation represented by this node.
 	std::string getName();
 
+	//Get all edges
+	std::map<unsigned, Edge*> getEdges();
+
 
 private:
 	Database* db;					//Pointer to DB, in order to get cardinalities and domain sizes

@@ -44,7 +44,26 @@ Node* QueryGraph::getNode(unsigned binding) {
 
 void QueryGraph::print(){
 	for(unsigned i = 0; i < nodes.size(); i++) {
-		std::cout << nodes.at(i)->getName() << std::endl;
+		Node* node = nodes.at(i);
+		std::cout << node->getName() << " is joined with: " << std::endl;
+		auto edgemap = node->getEdges();
+
+		for(auto it = edgemap.begin(); it !=  edgemap.end(); it++) {
+			std::cout << "\t" << nodes.at(it->first)->getName() << " on: ";
+
+			Edge* e = it->second;
+			
+
+			auto conditions = e->getConditions();
+
+			for(auto it2 = conditions.begin(); it2 != conditions.end(); it2++) {
+				std::cout << it2->first << "=" << it2->second << ", ";
+			}
+			std::cout << std::endl;
+			std::cout << "\t\tEstimated selectivity of join: " << e->getSelectivity() << std::endl;
+
+			
+		}
 	}
 }
 

@@ -48,3 +48,10 @@ void Node::addSelection(std::string attribute, std::string constant, bool isCons
 std::string Node::getName() {
 	return relationName;
 }
+
+/*
+	Get all edges
+*/
+std::map<unsigned, Edge*> Node::getEdges() {
+	return edges;
+}
