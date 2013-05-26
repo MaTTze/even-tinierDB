@@ -1,0 +1,198 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+\PassOptionsToPackage{fleqn}{amsmath}
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{graphicx}
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\normalfont\scshape} % Make all sections centered, the default font and small caps
+
+\usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usetikzlibrary{automata,positioning}
+\usepackage{latexsym}
+\usepackage{float}
+\usepackage{listings}
+
+\usepackage[compact]{titlesec}
+\titlespacing{\section}{0pt}{*10}{*1} % Spacing between sections
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{0pt} % Customize the height of the header
+\usepackage{fullpage}
+
+\usepackage{amsmath}
+\setlength{\mathindent}{25.0pt}
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Technische Universit\"at M\"unchen, Query Optimization} \\ [25pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Exercise 4 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Matthias Gollwitzer, Jan Schalkamp} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+\lstset{language=SQL}
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section{Exercise 1}
+\subsection{GOO}
+Consider the cardinalities of relations $R_1$ to $R_4$ and the query graph as given in figures  \ref{relations} and \ref{qgraph}:
+\begin{figure}[H]
+\centering
+  \begin{tabular}{ | c | c | }
+  	\hline
+   	\multicolumn{2}{|c|}{Relations} \\ 
+	\hline
+	Relation & Cardinality \\ \hline \hline
+    	$R_1$ & 4 \\ \hline 
+    	$R_2$ & 4 \\ \hline
+	$R_3$ & 1.000 \\ \hline
+	$R_4$ & 1.000 \\ \hline
+  \end{tabular}
+  \caption{Example relations}
+  \label{relations}
+ \end{figure}
+
+\begin{figure}[H]
+	\centering
+		\begin{tikzpicture}[shorten >=1pt,node distance=2cm,auto]		
+		
+		\node[state] (r1) {$R_1$};
+		\node[state] (r3) [right of=r1] {$R_3$};
+		\node[state] (r2) [below of=r1] {$R_2$};
+		\node[state] (r4) [right of=r2] {$R_4$};
+
+
+		\path[->]	
+			
+			(r1) edge node {0.05} (r3)
+			(r3) edge node {} (r1)
+			(r1) edge node {0.75} (r2)
+			(r2) edge node {} (r1)
+			(r2) edge node {0.05} (r4)
+			(r4) edge node {} (r2)
+			;
+		\end{tikzpicture}
+	\caption{Query graph with cardinalities}
+	  \label{qgraph}
+\end{figure}
+\pagebreak
+Figure \ref{goo} shows the resulting join tree of the GOO algorithm. Labels beside the edges depict the cardinality. The values in brackets depict $C_{out}$. 
+\begin{figure}[H]
+\centering
+	\begin{tikzpicture}
+	\tikzset{level distance=40pt, sibling distance=10pt}
+	
+	\Tree
+	[.{$\Join$ ($30.612$)}
+		\edge node[auto=right] {600};
+		[.{$\Join$ ($612$)}
+			\edge node[auto=right] {12};
+			[.{$\Join$ ($12$)}
+				\edge node[auto=right] {4};
+				[.{$R_1$} ]
+				\edge node[auto=left] {4};
+				[.{$R_2$} ]
+			]
+			\edge node[auto=left] {$1.000$};
+			[.{$R_3$} ]
+		]
+		\edge node[auto=left] {$1.000$};
+		[.{$R_4$} ]
+	]
+	\end{tikzpicture}
+\caption{GOO join tree}
+  \label{goo}
+\end{figure}
+
+The optimal join tree shown in figure \ref{optimal}, however, has lower cost. As one can see, the cost in the GOO generated join tree are $30.612$, whereas the optimal join tree's cost are $30.400$.
+
+\begin{figure}[H]
+\centering
+	\begin{tikzpicture}
+	\tikzset{level distance=40pt, sibling distance=10pt}
+	
+	\Tree
+	[.{$\Join$ ($30.400$)}
+		\edge node[auto=right] {$200$};
+		[.{$\Join$ ($200$)}
+			\edge node[auto=right] {$4$};
+			[.{$R_1$} ]
+			\edge node[auto=left] {$1.000$};
+			[.{$R_3$} ]
+		]
+		\edge node[auto=left] {$200$};
+		[.{$\Join$ ($200$)}
+			\edge node[auto=right] {$4$};
+			[.{$R_2$} ]
+			\edge node[auto=left] {$1.000$};
+			[.{$R_4$} ]
+		]
+	]
+	\end{tikzpicture}
+\caption{Optimal join tree}
+  \label{optimal}
+\end{figure}
+
+
+\subsection{IKKBZ}
+
+\section{Exercise 2}
+Compiling of our even-tinierDB is done via \textit{make all} command. Changes to the originally provided Makefile include 
+
+
+\end{document}
