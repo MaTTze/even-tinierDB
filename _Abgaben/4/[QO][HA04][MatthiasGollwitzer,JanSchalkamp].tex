@@ -190,9 +190,29 @@ The optimal join tree shown in figure \ref{optimal}, however, has lower cost. As
 
 
 \subsection{IKKBZ}
-
+-
 \section{Exercise 2}
-Compiling of our even-tinierDB is done via \textit{make all} command. Changes to the originally provided Makefile include 
+Compiling of our even-tinierDB is done via \textit{make} command - just like tinyDB. To run an example of the second exercise, please execute \textit{./bin/homework3}. This will build the query graph for the following query:
+ \begin{figure}[H]
+ \begin{lstlisting}[frame=single][H]  % Start your code-block
+	select v.titel, v.gelesenvon, p.persnr, p.name
+	from vorlesungen v, professoren p, hoeren h 
+	where 	v.titel = p.persnr and 
+		v.gelesenvon = p.persnr and 
+		h.vorlnr = v.vorlnr;
+\end{lstlisting}
+\caption{Example query}
+\end{figure}
 
-
+Important files resp. classes for this exercise are (further explanation via comments in each class):
+\begin{itemize}
+	\item \textbf{src/compiler/querygraph/Edge}: Represents an edge between 2 nodes. Selectivity estimation is done here in the constructor.
+	\item \textbf{src/compiler/querygraph/Node}: Represents a relation within the query graph. Estimated cardinality is done each time ::addSelection() is called.
+	\item \textbf{src/compiler/querygraph/QueryGraph}: Wrapper class. Manages all edges/nodes and their correct insertion into the graph.
+	\item \textbf{src/compiler/QueryGraphCompiler}: Reads the parsed query and acts accordingly. Relations will be added to QueryGraph as nodes, joins as edges. Self-joins and selections will be added via addSelection in order to estimate the cardinality of a certain node.
+	\item \textbf{src/parser/Parser}: Parses the actual query string and returns a Query object.
+	\item \textbf{src/parser/Query}: Important data structure, which stores all important informations of the query.
+	\item \textbf{homeworks/homework3}: provides means of executing and testing the current homework.
+	
+\end{itemize}
 \end{document}
