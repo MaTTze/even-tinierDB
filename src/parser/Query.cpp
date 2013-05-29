@@ -7,6 +7,8 @@
 #include "Query.hpp"
 
 
+Query::Query() {}
+
 void Query::addProjection(std::string binding, std::string attribute)
 {
 	unsigned bind = getRelation(binding);
@@ -23,8 +25,7 @@ void Query::addRelation(std::string rel, std::string binding)
 
 
 
-Query::Query()
-{
+Query::Query(Database* db):db(db){
 }
 
 
@@ -86,4 +87,8 @@ const std::vector<std::string>& Query::getRelations() const {
 
 std::unordered_map<unsigned, std::unordered_map<std::string, std::string> > Query::getSelections() const {
 	return selections;
+}
+
+Database* Query::getDB() const {
+	return db;
 }

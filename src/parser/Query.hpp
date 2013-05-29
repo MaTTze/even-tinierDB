@@ -7,6 +7,7 @@
 
 #ifndef QUERY_HPP_
 #define QUERY_HPP_
+#include "../Database.hpp"
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
@@ -15,7 +16,8 @@
 #include <vector>
 class Query {
 public:
-   Query();
+	Query();
+   Query(Database*);
    void addRelation(std::string, std::string);
    void addProjection(std::string, std::string);
    void addJoincondition(std::string,std::string,std::string,std::string);
@@ -33,6 +35,7 @@ public:
 	std::unordered_map<unsigned, std::unordered_set<std::string> > getProjections() const;
 	const std::vector<std::string>& getRelations() const;
 	std::unordered_map<unsigned, std::unordered_map<std::string, std::string> > getSelections() const;
+	Database* getDB() const;
 
 private:
 
@@ -46,6 +49,7 @@ private:
    std::map<std::pair<unsigned,unsigned>, std::set<std::pair<std::string,std::string> > > joinconditions; //not unordered to avoid hash<pair> problematic
    /// binding.attribute=constant from where clause
    std::unordered_map<unsigned,std::unordered_map<std::string,std::string> > selections;
+   Database* db;
 };
 
 #endif /* QUERY_HPP_ */

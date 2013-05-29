@@ -25,7 +25,7 @@ void QueryGraph::addEdge(std::pair<unsigned, unsigned> bindings, std::set<std::p
 	Edge* e = new Edge(db, bindings.first, bindings.second, conditions, this);
 	nodes.at(bindings.first)->addEdge(bindings.second, e);
 	nodes.at(bindings.second)->addEdge(bindings.first, e);
-	edges.push_back(e);
+	edges.insert(std::make_pair(bindings, e));
 }
 
 /*
@@ -41,6 +41,46 @@ void QueryGraph::addSelection(unsigned binding, std::string attribute, std::stri
 Node* QueryGraph::getNode(unsigned binding) {
 	return nodes.at(binding);
 } 
+
+std::vector<Node*> QueryGraph::getNodes() {
+	return nodes;
+}
+
+std::map<std::pair<unsigned, unsigned>, Edge*> QueryGraph::getEdges() {
+	return edges;
+}
+
+double QueryGraph::evalSelectivity(std::set<unsigned> bindings1, std::set<unsigned> bindings2) {
+	double selectivity = 1.0;
+	for(auto it = bindings1.begin(); it != bindings1.end(); it++) {
+		for(auto it2 = bindings2.begin(); it2 != bindings2.end(); it2++) {
+			auto e = edges.end();
+			if(*it > *it2) {
+				e = edges.find(std::make_pair(*it, *it2));
+			} else {
+				e = edges.find(std::make_pair(*it2, *it));
+			}
+			if(e != edges.end())
+				selectivity *= e->second->getSelectivity();
+		}
+	}
+	return selectivity;
+}
+
+void QueryGraph::addConditionsToJoin(JoinNode* n, std::set<unsigned> bindings1, std::set<unsigned> bindings2) {
+	for(auto it = bindings1.begin(); it != bindings1.end(); it++) {
+		for(auto it2 = bindings2.begin(); it2 != bindings2.end(); it2++) {
+			auto e = edges.end();
+			if(*it > *it2) {
+				e = edges.find(std::make_pair(*it, *it2));
+			} else {
+				e = edges.find(std::make_pair(*it2, *it));
+			}
+			if(e != edges.end())
+				n->addCondition(std::make_pair(*it, *it2), e->second->getConditions());
+		}
+	}
+}
 
 void QueryGraph::print(){
 	for(unsigned i = 0; i < nodes.size(); i++) {

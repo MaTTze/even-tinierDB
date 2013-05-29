@@ -9,7 +9,7 @@
 #include "querygraph/Node.hpp"
 
 
-QueryGraphCompiler::QueryGraphCompiler(Database* db):db(db) {
+QueryGraphCompiler::QueryGraphCompiler(Database* db):db(db),q(db) {
 }
 
 QueryGraph* QueryGraphCompiler::compile(Query query) {

@@ -21,7 +21,7 @@ Parser::Parser(Database *db):db(db)
 
 Query Parser::parse(std::string query)
 {
-   Query q;
+   Query q = Query(db);
    //remove leading and trailing whitespaces
    trim(query);
    //find select

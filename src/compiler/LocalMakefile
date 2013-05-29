@@ -1,11 +1,14 @@
 include src/compiler/ast/LocalMakefile
 include src/compiler/querygraph/LocalMakefile
+include src/compiler/strategies/LocalMakefile
 
 
 obj_compiler:=					\
 	bin/compiler/SimpleCompiler.o			\
 	bin/compiler/SimpleExecutor.o 			\
 	bin/compiler/QueryGraphCompiler.o		\
-	$(obj_ast)							\
-	$(obj_qg)
+	bin/compiler/Compiler.o					\
+	$(obj_ast)								\
+	$(obj_qg)								\
+	$(obj_strat)
 

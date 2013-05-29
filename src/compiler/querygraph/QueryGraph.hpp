@@ -6,10 +6,11 @@
  */
 
 #ifndef QUERYGRAPH_HPP_
-#define QUERYGRAPH_HPP
+#define QUERYGRAPH_HPP_
 #include "Node.hpp"
 #include "Edge.hpp"
 #include "Database.hpp"
+#include "../ast/JoinNode.hpp"
 #include <vector>
 #include <set>
 #include <string>
@@ -30,12 +31,20 @@ public:
 	//Get a node by its binding.
 	Node* getNode(unsigned);
 
+	std::vector<Node*> getNodes();
+
+	std::map<std::pair<unsigned, unsigned>, Edge*> getEdges();
+
+	double evalSelectivity(std::set<unsigned>, std::set<unsigned>);
+
+	void addConditionsToJoin(JoinNode*, std::set<unsigned>, std::set<unsigned>);
+
 	void print();
 
 private:
 	Database* db;					//pointer to database to retreive tables and domain sizes
 	std::vector<Node*> nodes;		//all nodes in the Query Graph
-	std::vector<Edge*> edges;		//all edges in the Query Graph
+	std::map<std::pair<unsigned, unsigned>, Edge*> edges;		//all edges in the Query Graph
 };
 
 

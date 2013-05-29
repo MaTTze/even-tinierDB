@@ -30,6 +30,8 @@ public:
 	//Get all edges
 	std::map<unsigned, Edge*> getEdges();
 
+	double getECardinality();
+
 
 private:
 	Database* db;					//Pointer to DB, in order to get cardinalities and domain sizes

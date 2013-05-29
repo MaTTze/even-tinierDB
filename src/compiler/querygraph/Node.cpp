@@ -55,3 +55,7 @@ std::string Node::getName() {
 std::map<unsigned, Edge*> Node::getEdges() {
 	return edges;
 }
+
+double Node::getECardinality() {
+	return estimatedCardinality;
+}
