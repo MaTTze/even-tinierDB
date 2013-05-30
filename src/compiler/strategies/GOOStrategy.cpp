@@ -54,8 +54,8 @@ ASTNode* GOOStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTNod
 		std::set<unsigned> combinedRelations = std::get<1>(*child1);
 		combinedRelations.insert(std::get<1>(*child2).begin(), std::get<1>(*child2).end());
 
-		trees.erase(child1);
 		trees.erase(child2);
+		trees.erase(child1);
 
 		trees.push_back(std::make_tuple(n, combinedRelations, min_val));
 	}
