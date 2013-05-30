@@ -15,7 +15,7 @@ class OrderStrategy {
 public:
 	OrderStrategy();
 	virtual ~OrderStrategy();
-	virtual ASTNode* generateJoinTree(QueryGraph, std::vector<ASTNode*>) = 0;
+	virtual ASTNode* generateJoinTree(QueryGraph, std::vector<ASTNode*>&) = 0;
 };
 
 #endif /* ORDERSTRATEGY_HPP_ */

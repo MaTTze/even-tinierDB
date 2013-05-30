@@ -14,7 +14,7 @@ class GOOStrategy: public OrderStrategy {
 public:
 	GOOStrategy();
 	virtual ~GOOStrategy();
-	virtual ASTNode* generateJoinTree(QueryGraph, std::vector<ASTNode*>);
+	virtual ASTNode* generateJoinTree(QueryGraph, std::vector<ASTNode*>&);
 
 private:
 };

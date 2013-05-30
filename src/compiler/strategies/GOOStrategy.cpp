@@ -23,7 +23,7 @@ GOOStrategy::~GOOStrategy() {
 	// TODO Auto-generated destructor stub
 }
 
-ASTNode* GOOStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTNode*> relations) {
+ASTNode* GOOStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTNode*>& relations) {
 	std::vector<std::tuple<ASTNode*, std::set<unsigned>, double > > trees;
 	JoinNode* n;
 	for(unsigned i = 0; i < relations.size(); i++) {
@@ -47,6 +47,9 @@ ASTNode* GOOStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTNod
 
 		n = new JoinNode(std::get<0>(*child1), std::get<0>(*child2));
 		querygraph.addConditionsToJoin(n, std::get<1>(*child1), std::get<1>(*child2));
+
+		std::get<0>(*child1)->setParent(n);
+		std::get<0>(*child2)->setParent(n);
 
 		std::set<unsigned> combinedRelations = std::get<1>(*child1);
 		combinedRelations.insert(std::get<1>(*child2).begin(), std::get<1>(*child2).end());
