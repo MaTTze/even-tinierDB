@@ -58,7 +58,9 @@ void Compiler::generateSelections() {
 void Compiler::generateJoinTree() {
 	QueryGraphCompiler qgc = QueryGraphCompiler(q.getDB());
 	QueryGraph qg = *(qgc.compile(q));
-	currentRoot = s->generateJoinTree(qg, std::copy(relations));
+	std::vector<ASTNode*> copy_relations;
+	std::copy(relations.begin(), relations.end(), copy_relations.begin());
+	currentRoot = s->generateJoinTree(qg, copy_relations);
 }
 
 Compiler::Compiler(OrderStrategy* strategy):s(strategy){
