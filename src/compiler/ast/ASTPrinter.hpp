@@ -11,8 +11,10 @@
 
 class ASTPrinter {
 public:
-	static void print(ASTNode*, unsigned);
-
+	static void print(ASTNode*);
+private:
+	static void printHelper(ASTNode*, unsigned);
+	static void printIndentation(unsigned);
 };
 
 

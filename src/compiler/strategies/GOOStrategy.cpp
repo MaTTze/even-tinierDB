@@ -13,6 +13,7 @@
 #include <math.h>
 #include <limits>
 #include <tuple>
+#include <math.h>
 
 GOOStrategy::GOOStrategy() {
 	// TODO Auto-generated constructor stub
@@ -33,10 +34,10 @@ ASTNode* GOOStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTNod
 		double min_val = std::numeric_limits<double>::max();
 		auto child1 = trees.begin();
 		auto child2 = trees.begin();
-
+		
 		for(auto it = trees.begin(); it != --trees.end(); it++) {
 			for(auto it2 = it; it2 != trees.end(); it2++) {
-				double outputsize = std::get<2>(*it2) * std::get<2>(*it) * querygraph.evalSelectivity(std::get<1>(*it), std::get<1>(*it2));
+				double outputsize = ceil(std::get<2>(*it2) * std::get<2>(*it) * querygraph.evalSelectivity(std::get<1>(*it), std::get<1>(*it2)));
 				if(outputsize < min_val) {
 					child1 = it;
 					child2 = it2;
