@@ -2,6 +2,7 @@
 .cproject
 .settings/*
 bin/*
-_Abgaben/*.aux
-_Abgaben/*.log
-_Abgaben/*.gz
+*.aux
+*.log
+*.gz
+data/tpch/*
