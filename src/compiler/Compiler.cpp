@@ -14,10 +14,16 @@
 
 ASTNode* Compiler::compile(Query query) {
 	q = query;
+	std::cout << "Compiler: Bulding AST..." << std::endl;
 	generateTablescans();
+	std::cout << "Compiler: Tablescans built." << std::endl;
 	generateSelections();
+	std::cout << "Compiler: Selections built." << std::endl;
 	generateJoinTree();
+	std::cout << "Compiler: Join Tree built." << std::endl;
 	generateProjections();
+	std::cout << "Compiler: Projections built." << std::endl;
+	std::cout << "Compiler: Finished." << std::endl;
 	return currentRoot;
 }
 
@@ -52,7 +58,6 @@ void Compiler::generateSelections() {
 			joinconditions.erase(it);
 		}
 	}
-
 }
 
 void Compiler::generateJoinTree() {
@@ -69,7 +74,13 @@ void Compiler::generateProjections() {
 	if (projections.empty()){
 		return;
 	}
-	ASTNode* tmp = new ProjectionNode(currentRoot, projections);
-	currentRoot->setParent(tmp);
-	currentRoot = tmp;
+	if(currentRoot == 0 ) {		//Only one relation - currentRoot hasn't been set.
+		ASTNode* tmp = new ProjectionNode(relations.at(0), projections);
+		relations.at(0)->setParent(tmp);
+		currentRoot = tmp;
+	} else {
+		ASTNode* tmp = new ProjectionNode(currentRoot, projections);
+		currentRoot->setParent(tmp);
+		currentRoot = tmp;
+	}
 }
