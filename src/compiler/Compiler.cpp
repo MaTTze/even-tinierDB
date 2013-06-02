@@ -24,13 +24,16 @@ ASTNode* Compiler::compile(Query query) {
 	generateProjections();
 	std::cout << "Compiler: Projections built." << std::endl;
 	std::cout << "Compiler: Finished." << std::endl;
+	std::cout << currentRoot << std::endl;
 	return currentRoot;
 }
 
 void Compiler::generateTablescans() {
 	auto rel = q.getRelations();
 	for (unsigned i = 0; i < rel.size(); i++) {
-		relations.push_back(new TablescanNode(rel.at(i), i));
+		ASTNode* tablescan = new TablescanNode(rel.at(i), i);
+		relations.push_back(tablescan);
+		currentRoot = tablescan;
 	}
 }
 
@@ -63,7 +66,9 @@ void Compiler::generateSelections() {
 void Compiler::generateJoinTree() {
 	QueryGraphCompiler qgc = QueryGraphCompiler(q.getDB());
 	QueryGraph qg = *(qgc.compile(q));
-	currentRoot = s->generateJoinTree(qg, relations);
+	ASTNode* joinTree = s->generateJoinTree(qg, relations);
+	if(joinTree != 0)
+		currentRoot = joinTree;
 }
 
 Compiler::Compiler(OrderStrategy* strategy):s(strategy){
