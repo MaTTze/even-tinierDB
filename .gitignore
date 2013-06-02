@@ -2,14 +2,6 @@
 .cproject
 .settings/*
 bin/*
-_Abgaben/4/[QO][HA04][MatthiasGollwitzer,JanSchalkamp].aux
-_Abgaben/4/[QO][HA04][MatthiasGollwitzer,JanSchalkamp].log
-_Abgaben/4/[QO][HA04][MatthiasGollwitzer,JanSchalkamp].synctex.gz
-_Abgaben/4/[QO][HA04][MatthiasGollwitzer,JanSchalkamp].zip
-_Abgaben/4/[QO][HA04][MatthiasGollwitzer,JanSchalkamp].aux
-_Abgaben/4/[QO][HA04][MatthiasGollwitzer,JanSchalkamp].log
-_Abgaben/4/[QO][HA04][MatthiasGollwitzer,JanSchalkamp].synctex.gz
-_Abgaben/4/[QO][HA04][MatthiasGollwitzer,JanSchalkamp].zip
-_Abgaben/5/[QO][HA05][MatthiasGollwitzer,JanSchalkamp].aux
-_Abgaben/5/[QO][HA05][MatthiasGollwitzer,JanSchalkamp].log
-_Abgaben/5/[QO][HA05][MatthiasGollwitzer,JanSchalkamp].synctex.gz
+_Abgaben/*.aux
+_Abgaben/*.log
+_Abgaben/*.gz
