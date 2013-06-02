@@ -36,7 +36,7 @@ ASTNode* GOOStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTNod
 		auto child2 = trees.begin();
 		
 		for(auto it = trees.begin(); it != --trees.end(); it++) {
-			for(auto it2 = it; it2 != trees.end(); it2++) {
+			for(auto it2 = it+1; it2 != trees.end(); it2++) {
 				double outputsize = ceil(std::get<2>(*it2) * std::get<2>(*it) * querygraph.evalSelectivity(std::get<1>(*it), std::get<1>(*it2)));
 				if(outputsize < min_val) {
 					child1 = it;
