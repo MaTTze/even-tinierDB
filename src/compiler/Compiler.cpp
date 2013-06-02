@@ -24,7 +24,6 @@ ASTNode* Compiler::compile(Query query) {
 	generateProjections();
 	std::cout << "Compiler: Projections built." << std::endl;
 	std::cout << "Compiler: Finished." << std::endl;
-	std::cout << currentRoot << std::endl;
 	return currentRoot;
 }
 
@@ -46,6 +45,8 @@ void Compiler::generateSelections() {
 			ASTNode* tmp = new SelectionNode(relations[rel], rel, it2->first, it2->second, true);
 			relations[rel]->setParent(tmp);
 			relations[rel] = tmp;
+			currentRoot->setParent(tmp);
+			currentRoot = tmp;
 		}
 	}
 	joinconditions = std::map<std::pair<unsigned,unsigned>, std::set<std::pair<std::string,std::string> > >(q.getJoinconditions());
@@ -57,6 +58,8 @@ void Compiler::generateSelections() {
 				ASTNode* tmp = new SelectionNode(relations[i], i, it2->first, it2->second, false);
 				relations[i]->setParent(tmp);
 				relations[i] = tmp;
+				currentRoot->setParent(tmp);
+				currentRoot = tmp;
 			}
 			joinconditions.erase(it);
 		}
