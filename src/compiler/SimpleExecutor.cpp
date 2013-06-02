@@ -10,8 +10,10 @@ SimpleExecutor::SimpleExecutor(ASTNode* root, Query query, Database* db): tree(r
 }
 
 void SimpleExecutor::execute() {
-	Printer out(std::move(executeNode(tree)));
+	tablescans = std::vector<Tablescan*>(query.getRelations().size());
 
+	Printer out(std::move(executeNode(tree)));
+	std::cout << "Executing..." << std::endl;
 	out.open();
 	while (out.next());
 	out.close();
@@ -42,15 +44,14 @@ std::unique_ptr<Operator> SimpleExecutor::executeTablescan(TablescanNode* n) {
 	Table& t = db->getTable(n->getTableName());
 	std::unique_ptr<Operator> s(new Tablescan(t));
 
-	tablescans.push_back(dynamic_cast<Tablescan*>(s.get()));
-	std::cout << "Tablescan" << std::endl;
+	tablescans[n->getRelation()] = dynamic_cast<Tablescan*>(s.get());
+	std::cout << "Build Tablescan " << n->getTableName() << ". " << n->getRelation() << std::endl;
 	return std::move(s);
 }
 
 std::unique_ptr<Operator> SimpleExecutor::executeSelection(SelectionNode* n) {
-	std::cout << "Selection" << std::endl;
     std::unique_ptr<Operator> childOp = executeNode(n->getChild());
-
+	std::cout << "Build Selection" << std::endl;
     Tablescan* scan= tablescans.at(n->getBinding());
 	
     Register* condition = new Register(); setConstantCondition(condition, n->getBinding(), n->getAttribute(), n->getRight());
@@ -64,6 +65,7 @@ std::unique_ptr<Operator> SimpleExecutor::executeSelection(SelectionNode* n) {
 std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 	std::unique_ptr<Operator> leftOp(executeNode(n->getLeft()));
 	std::unique_ptr<Operator> rightOp(executeNode(n->getRight()));
+	std::cout << "Build Join" << std::endl;
 
 	auto joins = n->getConditions();
 
@@ -78,8 +80,19 @@ std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 		auto conditions = it->second;
 
 		for(auto it2 = conditions.begin(); it2 != conditions.end(); it2++) {
-			const Register* regLeft = scanLeft->getOutput(it2->first);
-			const Register* regRight = scanRight->getOutput(it2->second);
+			const Register* regLeft;
+			const Register* regRight;
+			std::cout << it2->first << " attribute exists in " << it->first.first << ": " << scanLeft->getTable().findAttribute(it2->first) << std::endl; 
+			std::cout << it2->first << " attribute exists in " << it->first.second << ": " << scanRight->getTable().findAttribute(it2->first) << std::endl; 
+			std::cout << it2->second << " attribute exists in " << it->first.first << ": " << scanLeft->getTable().findAttribute(it2->second) << std::endl; 
+			std::cout << it2->second << " attribute exists in " << it->first.second << ": " << scanRight->getTable().findAttribute(it2->second) << std::endl;
+			if(scanLeft->getTable().findAttribute(it2->first) != -1) {
+				regLeft = scanLeft->getOutput(it2->first);
+				regRight = scanRight->getOutput(it2->second);
+			} else {
+				regLeft = scanLeft->getOutput(it2->second);
+				regRight = scanRight->getOutput(it2->first);
+			}
 
 			std::unique_ptr<Operator> select(new Selection(std::move(op), regLeft, regRight));
 			op = (std::move(select));
@@ -89,8 +102,8 @@ std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 }
 
 std::unique_ptr<Operator> SimpleExecutor::executeProjection(ProjectionNode* n) {
-	std::cout << "Projection" << std::endl;
 	std::unique_ptr<Operator> childOp(executeNode(n->getChild()));
+	std::cout << "Build Projection" << std::endl;
 	auto projections = n->getProjections();
 	
 	if(projections.size() < 1) {

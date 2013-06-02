@@ -14,11 +14,15 @@ int main()
    Database db;
    db.open("data/tpch/tpch");
    Parser p = Parser(&db);
-   std::string qry = "select * from lineitem l, orders o, customer c where l.l_orderkey=o.o_orderkey and o.o_custkey=c.c_custkey and c.c_name=Customer#000014993";
+   std::string qry = "select * from orders o, lineitem l, customer c where o.o_orderkey=l.l_orderkey and o.o_custkey=c.c_custkey and c.c_name=Customer#000014993";
+   std::string qry1 = "select * from customer c, orders o where c.c_name=Customer#000014993 and o.o_custkey=c.c_custkey";
+   std::cout << "Parsing query: " << qry << std::endl;
    Query query = p.parse(qry);
+   std::cout << "Parsed." << std::endl;
    GOOStrategy s = GOOStrategy();
    Compiler c = Compiler(&s);
    ASTNode* tree = c.compile(query);
+   std::cout << qry << std::endl;
    std::cout << "Query results in this AST: " << std::endl; 
    ASTPrinter::print(tree);
    std::cout << "---------------------------" << std::endl; 
