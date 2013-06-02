@@ -5,6 +5,7 @@
  *      Author: matthias
  */
 #include "SimpleExecutor.hpp"
+#include <sys/time.h>
 
 SimpleExecutor::SimpleExecutor(ASTNode* root, Query query, Database* db): tree(root), query(query), db(db) {
 }
@@ -14,9 +15,12 @@ void SimpleExecutor::execute() {
 
 	Printer out(std::move(executeNode(tree)));
 	std::cout << "Executing..." << std::endl;
+	unsigned long int start = time(NULL);
 	out.open();
 	while (out.next());
 	out.close();
+
+	std::cout << "Finished. Execution took ~" << time(NULL)-start << " seconds." << std::endl;
 
 }
 
@@ -69,11 +73,14 @@ std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 
 	auto joins = n->getConditions();
 
-	std::unique_ptr<Operator> op(new CrossProduct(std::move(leftOp),std::move(rightOp)));
+	std::unique_ptr<Operator> op;
 
 	if (joins.empty()){
+		std::unique_ptr<Operator> op(new CrossProduct(std::move(leftOp),std::move(rightOp)));
 		return std::move(op);
 	}
+
+	bool first = true;
 	for (auto it = joins.begin(); it != joins.end();it++){
 		Tablescan* scanLeft = tablescans.at(it->first.first);
 		Tablescan* scanRight = tablescans.at(it->first.second);
@@ -82,10 +89,7 @@ std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 		for(auto it2 = conditions.begin(); it2 != conditions.end(); it2++) {
 			const Register* regLeft;
 			const Register* regRight;
-			std::cout << it2->first << " attribute exists in " << it->first.first << ": " << scanLeft->getTable().findAttribute(it2->first) << std::endl; 
-			std::cout << it2->first << " attribute exists in " << it->first.second << ": " << scanRight->getTable().findAttribute(it2->first) << std::endl; 
-			std::cout << it2->second << " attribute exists in " << it->first.first << ": " << scanLeft->getTable().findAttribute(it2->second) << std::endl; 
-			std::cout << it2->second << " attribute exists in " << it->first.second << ": " << scanRight->getTable().findAttribute(it2->second) << std::endl;
+
 			if(scanLeft->getTable().findAttribute(it2->first) != -1) {
 				regLeft = scanLeft->getOutput(it2->first);
 				regRight = scanRight->getOutput(it2->second);
@@ -94,8 +98,18 @@ std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 				regRight = scanRight->getOutput(it2->first);
 			}
 
-			std::unique_ptr<Operator> select(new Selection(std::move(op), regLeft, regRight));
-			op = (std::move(select));
+			std::unique_ptr<Operator> op2;
+
+			if(first) {
+				std::unique_ptr<Operator> hj(new HashJoin(std::move(rightOp), std::move(leftOp), regRight, regLeft));
+				op2 = std::move(hj);
+			}
+			else {
+				std::unique_ptr<Operator> sel(new Selection(std::move(op), regLeft, regRight));
+				op2 = std::move(sel);
+			}
+			op = (std::move(op2));
+			first = false;
 		}
 	}
 	return std::move(op);

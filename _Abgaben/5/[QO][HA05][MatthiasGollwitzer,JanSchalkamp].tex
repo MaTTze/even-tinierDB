@@ -107,7 +107,7 @@
 	\sout{$\{A,B, C\}$} & \sout{$(C \Join A) \Join B$} & \sout{$2.000$} \\ \hline  
 	$\{A,B, C\}$ & $(B \Join A) \Join C$ & $1.100$ \\ \hline 
   \end{tabular}
-  \caption{Example relations}
+  \caption{DP Table}
   \label{relations}
  \end{figure}
 
@@ -131,7 +131,21 @@
 			(r3) edge node {} (r2)
 			;
 		\end{tikzpicture}
-	\caption{Query graph with cardinalities}
+	\caption{Query graph}
 	  \label{qgraph}
 \end{figure}
+
+\section{Exercise 2}
+Sorry in advance: we unfortunately have no code comments for this week's exercise. Important files for GOO implementation:
+\begin{itemize}
+	\item \textbf{src/compiler/Compiler}: creates an abstract syntax tree which serves as input for the SimpleExecutor. Especially important for this exercise is the method Compiler::generateJoinTree. Here we create out join tree depending on what join ordering implementation shall be used via strategy pattern. 
+	\item \textbf{src/compiler/SimpleExecutor}: Executes a query via the input of an AST recursively.
+	\item \textbf{src/compiler/strategies/OrderStrategy}: abstract class for strategy pattern.
+	\item \textbf{src/compiler/strategies/GOOStrategy}: Implementation of the GOO algorithm. Takes a query graph and returns an AST. Basically iterates over all possible joins and selects the one with the minimal expected output, deletes it from the "to be joined"-list and iterates again - while building the AST.
+\end{itemize}
+
+Sorry \#2: We don't print the cost.
+
+\section{Exercise 3}
+Make as usual with \textit{"make"} command. Execute via \textit{./bin/homework5}. We are using the provided snapshot of tpch. The files are \textbf{not} included in our contribution, but the program will look for the tpch-database at \textit{data/tpch/tpch}. Also, the snapshot data provided interferes with the tinyDB system, as many tuples of the relations have semi-colons in their data - which the parser of tinyDB uses as delimiter. To correct this, please delete all semi-colons in all \textit{*.tbl} files (\textit{find/replace all} works great, as their delimiter is the pipe symbol - which will be compiled to the semi-colon...). 
 \end{document}
