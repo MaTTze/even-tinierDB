@@ -25,6 +25,8 @@ GOOStrategy::~GOOStrategy() {
 }
 
 ASTNode* GOOStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTNode*>& relations) {
+	std::cout << "Compiler: Running GOO" << std::endl;
+
 	std::vector<std::tuple<ASTNode*, std::set<unsigned>, double > > trees;
 	JoinNode* n;
 	for(unsigned i = 0; i < relations.size(); i++) {
@@ -54,7 +56,19 @@ ASTNode* GOOStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTNod
 
 		std::set<unsigned> combinedRelations = std::get<1>(*child1);
 		combinedRelations.insert(std::get<1>(*child2).begin(), std::get<1>(*child2).end());
-
+		std::cout << "	";
+		for (auto it = combinedRelations.begin(); it != combinedRelations.end(); it++) {
+			std::cout << *it;
+		}
+		std::cout << " = Join(";
+		for (auto it = std::get<1>(*child1).begin(); it != std::get<1>(*child1).end(); it++) {
+			std::cout << *it;
+		}
+		std::cout << ", ";
+		for (auto it = std::get<1>(*child2).begin(); it != std::get<1>(*child2).end(); it++) {
+			std::cout << *it;
+		}
+		std::cout << "; " << min_val << ")" << std::endl;
 		trees.erase(child2);
 		trees.erase(child1);
 
