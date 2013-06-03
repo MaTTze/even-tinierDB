@@ -73,7 +73,7 @@
 \normalfont \normalsize 
 \textsc{Technische Universit\"at M\"unchen, Query Optimization} \\ [25pt] % Your university, school and/or department name(s)
 \horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
-\huge Exercise 4 \\ % The assignment title
+\huge Exercise 5 \\ % The assignment title
 \horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
 }
 
@@ -142,9 +142,9 @@ Sorry in advance: we unfortunately have no code comments for this week's exercis
 	\item \textbf{src/compiler/SimpleExecutor}: Executes a query via the input of an AST recursively.
 	\item \textbf{src/compiler/strategies/OrderStrategy}: abstract class for strategy pattern.
 	\item \textbf{src/compiler/strategies/GOOStrategy}: Implementation of the GOO algorithm. Takes a query graph and returns an AST. Basically iterates over all possible joins and selects the one with the minimal expected output, deletes it from the "to be joined"-list and iterates again - while building the AST.
+	Cost will be printed as "Join(Subtree1, Subtree2; estimated output size)"
 \end{itemize}
 
-Sorry \#2: We don't print the cost.
 
 \section{Exercise 3}
 Make as usual with \textit{"make"} command. Execute via \textit{./bin/homework5}. We are using the provided snapshot of tpch. The files are \textbf{not} included in our contribution, but the program will look for the tpch-database at \textit{data/tpch/tpch}. Also, the snapshot data provided interferes with the tinyDB system, as many tuples of the relations have semi-colons in their data - which the parser of tinyDB uses as delimiter. To correct this, please delete all semi-colons in all \textit{*.tbl} files (\textit{find/replace all} works great, as their delimiter is the pipe symbol - which will be compiled to the semi-colon...). 
