@@ -1,0 +1,303 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+\PassOptionsToPackage{fleqn}{amsmath}
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{graphicx}
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\normalfont\scshape} % Make all sections centered, the default font and small caps
+
+\usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usetikzlibrary{automata,positioning}
+\usetikzlibrary{arrows,calc,fit}
+\usepackage{latexsym}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{ulem}
+\usepackage{amssymb}
+
+\usepackage[compact]{titlesec}
+\titlespacing{\section}{0pt}{*10}{*1} % Spacing between sections
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{0pt} % Customize the height of the header
+\usepackage{fullpage}
+
+\usepackage{amsmath}
+\setlength{\mathindent}{25.0pt}
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+\def\ojoin{\setbox0=\hbox{$\Join$}%
+  \rule[+0.095ex]{.3em}{.5pt}\llap{\rule[1.35ex]{0.3em}{0.5pt}}}
+\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
+\def\rightouterjoin{\mathbin{\Join\mkern-5.8mu\ojoin}}
+\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\Join\mkern-5.8mu\ojoin}}
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Technische Universit\"at M\"unchen, Query Optimization} \\ [25pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Exercise 6 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Matthias Gollwitzer, Jan Schalkamp} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+\lstset{language=SQL}
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section{Exercise 1}
+With BFS result in following ordering of nodes: $R_0 < R_1 < R_3 < R_2 < R_4$
+\begin{figure}[H]
+\centering
+  \begin{tabular}{ | c | c | c | c |}
+	\hline
+	S & X & N & emit \\ \hline \hline
+    	\{$R_4$\} & $\{R_0 .. R_4\}$ & $\emptyset$ & \{$R_4$\} \\ \hline 
+  	\{$R_2$\} & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & \{$R_2$\} \\ \hline 
+	\{$R_3$\} & $\{R_0, R_1, R_3\}$ & $\{R_2\}$ & \{$R_3$\} \\ \hline 
+	& & & \{$R_2, R_3$\} \\ \hline
+	$\{R_2, R_3\}$ & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & - \\ \hline 
+	\{$R_1$\} & $\{R_0, R_1\}$ & $\{R_2, R_4\}$ & \{$R_1$\}\\ \hline 
+	& & & \{$R_1, R_2$\} \\ \hline
+	& & & \{$R_1, R_4$\} \\ \hline
+	& & & \{$R_1, R_2, R_4$\} \\ \hline
+	$\{R_1, R_2\}$ & $\{R_0, R_1, R_2, R_4\}$ & $\{R_3\}$ & \{$R_1, R_2, R_3$\} \\ \hline 
+	\{$R_1, R_2, R_3$\} & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & - \\ \hline 
+	 \{$R_1, R_4$\} & $\{R_0, R_1, R_2, R_4\}$ & $\emptyset$ & - \\ \hline 
+	\{$R_1, R_2, R_4$\} & $\{R_0, R_1, R_2, R_4\}$ & $\{R_3\}$ & \{$R_1, R_2, R_3, R_4$\} \\ \hline 
+	\{$R_1, R_2, R_3, R_4$\} & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & - \\ \hline 
+	\{$R_0$\} & $\{R_0\}$ & $\{R_1, R_3\}$ & \{$R_0$\} \\ \hline 
+	& & & \{$R_0, R_1$\} \\ \hline
+	& & & \{$R_0, R_3$\} \\ \hline
+	& & & \{$R_0, R_1, R_3$\} \\ \hline
+	\{$R_0, R_1$\} & $\{R_0, R_1, R_3\}$ & $\{R_2, R_4\}$ & \{$R_0, R_1, R_2$\} \\ \hline 
+	& & & \{$R_0, R_1, R_4$\} \\ \hline
+	& & & \{$R_0, R_1, R_2, R_4$\} \\ \hline
+	\{$R_0, R_1, R_2$\} & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ &- \\ \hline 
+	\{$R_0, R_1, R_4$\} & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ &- \\ \hline 
+	\{$R_0, R_1, R_2, R_4$\} & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ &- \\ \hline 
+	\{$R_0, R_3$\} & $\{R_0, R_1, R_3\}$ & $\{R_2\}$ & \{$R_0, R_2, R_3$\} \\ \hline 
+	\{$R_0, R_2, R_3$\} & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ &- \\ \hline 	
+	\{$R_0, R_1, R_3$\} & $\{R_0, R_1, R_3\}$ & $\{R_4\}$ & \{$R_0, R_1, R_3, R_4$\} \\ \hline 
+	\{$R_0, R_1, R_3, R_4$\} & $\{R_0, R_1, R_3, R_4\}$ & $\{R_2\}$ & \{$R_0, R_1, R_2, R_3, R_4$\} \\ \hline 
+	\{$R_0, R_1, R_2, R_3, R_4$\} & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & - \\ \hline 	
+  \end{tabular}
+  \caption{Connected Subgraphs (via \textit{EnumerateCsg(G)})}
+  \label{relations}
+ \end{figure}
+ 
+\pagebreak
+
+
+
+\section{Exercise 2}
+Below $B()$ denotes the benefit function and all numbers $i$ beside the Joins depict the relation $R_i$.
+Step 1 of the simplification shows that the relations $R_2$ and $R_3$ should be joined before joining them with $R_0$. Figure (\ref{simpl1}) shows the resulting query graph after this first step. The arrow determines the reading direction of the hyper edge. In this case: Join $R_2$ and $R_3$ before $R_1$.
+
+\begin{align*}
+\textbf{Step 1:} \\
+B(0 \Join 1, 0 \Join 3) &= &\frac{C((0 \Join 1) \Join 3)}{C((0 \Join 3) \Join 1)}& =& \frac{20+2000}{1000+2000} &=& 0,673& \\ \\
+B(1 \Join 0, 1 \Join 2) &= &\frac{C((1 \Join 0) \Join 2)}{C((1 \Join 2) \Join 0)}& =& \frac{20+100}{100+100} &=& 0,6&\\ \\
+B(1 \Join 0, 1 \Join 4) &= &\frac{C((1 \Join 0) \Join 4)}{C((1 \Join 4) \Join 0)}& =& \frac{20+5000}{5000+5000} &=& 0,502&\\ \\
+B(1 \Join 2, 1 \Join 4) &= &\frac{C((1 \Join 2) \Join 4)}{C((1 \Join 4) \Join 2)}& =& \frac{100+25000}{5000+25000} &=& 0,836&\\ \\
+B(1 \Join 2, 2 \Join 3) &= &\frac{C((1 \Join 2) \Join 3)}{C((2 \Join 3) \Join 1)}& =& \frac{100+500}{250+500} &=& 0,8&\\ \\
+B(0 \Join 3, 3 \Join 2) &= &\frac{C((0 \Join 3) \Join 2)}{C((2 \Join 3) \Join 0)}& =& \frac{1000+500}{250+500} &=& 2 &\\ \\
+\end{align*}
+
+\begin{figure}[H]
+	\centering
+		\tikzstyle{b} = [text centered, thick]
+		%\tikzstyle{c} = [rectangle, draw]
+		\tikzstyle{l} = [draw, -latex',thick]  
+
+\begin{tikzpicture}[-,auto,scale=1.25]
+    \node [b]    (r0) {$R_0$};
+    \node [b]    (r1)   at ([shift={(1,0)}] r0) {$R_1$};
+    \node [b]    (r2)   at ([shift={(0,-1)}] r1) {$R_2$};
+    \node [b]    (r3)   at ([shift={(0,-1)}] r0) {$R_3$};
+    \node [b]    (r4)   at ([shift={(1,0)}] r1) {$R_4$};
+    \coordinate  (r0_r2)       at ($(r0)!0.5!(r2)$);  
+    
+    \draw[-] (r0) edge (r1);
+    \draw[-] (r1) edge (r2);
+    \draw[-] (r1) edge (r4);
+    \draw[<-] (r0) edge (r0_r2);	
+    \draw[-] (r0_r2) edge (r2);
+    \draw[-] (r0_r2) edge (r3);
+
+\end{tikzpicture}
+	\caption{First step of simplification}
+	  \label{simpl1}
+\end{figure}
+
+For Step 2 we re-use the old calculations except those affected by the new hyper edge. The resulting graph is shown in Figure (\ref{simpl2}). The benefit of joining relations $R_0$ and $R_1$ before $R_4$ is this step's biggest benefit, wherefore a hyper edge between those relations is introduced. 
+\begin{align*}
+\textbf{Step 2:} \\
+B(0 \Join \{2,3\}, \{2,3\}\ \Join 1) &= &\frac{C((0 \Join \{2,3\}) \Join 1)}{C((1 \Join \{2,3\}) \Join 0)}& =& \frac{750+1000}{750+1000} &=& 1& \\ \\
+B(0 \Join 1, 0 \Join \{2,3\}) &= &\frac{C((0 \Join 1) \Join \{2,3\})}{C((0 \Join \{2,3\}) \Join 1)}& =& \frac{20+1000}{750+1000} &=& 0,68&\\ \\
+\end{align*}
+
+\begin{figure}[H]
+	\centering
+		\tikzstyle{b} = [text centered, thick]
+		%\tikzstyle{c} = [rectangle, draw]
+		\tikzstyle{l} = [draw, -latex',thick]  
+
+\begin{tikzpicture}[-,auto,scale=1.25]
+    \node [b]    (r0) {$R_0$};
+    \node [b]    (r1)   at ([shift={(1,0)}] r0) {$R_1$};
+    \node [b]    (r2)   at ([shift={(0,-1)}] r1) {$R_2$};
+    \node [b]    (r3)   at ([shift={(0,-1)}] r0) {$R_3$};
+    \node [b]    (r4)   at ([shift={(1,0)}] r1) {$R_4$};
+    \coordinate  (r0_r2)       at ($(r0)!0.5!(r2)$);  
+    \coordinate  (r0_r1)       at ($(r0)!0.5!(r1)$);  
+    \coordinate  (r14)       at ([shift={(0,0.5)}] r1);  
+    
+    \draw[-] (r0) edge (r1);
+    \draw[-] (r1) edge (r2);
+    \draw (r0) edge[<-] (r0_r2);	
+    \draw[-] (r0_r2) edge (r2);
+    \draw[-] (r0_r2) edge (r3);
+    \draw[-] (r0_r1) edge (r14);
+    \draw (r14) edge[->] (r4);
+
+\end{tikzpicture}
+	\caption{Second step of simplification}
+	  \label{simpl2}
+\end{figure}
+
+\section{Exercise 3}
+\begin{figure}[H]
+\centering
+	\begin{tikzpicture}
+	\tikzset{level distance=40pt, sibling distance=10pt}
+	
+	\Tree
+	[.{$\Join (1)$}
+		[.{A} ]
+		[.{$\Join (2)$}
+			[.{B} ]
+			[.{$\rightouterjoin (3)$}
+				[.{$\Join (4)$}
+					[.{C} ]
+					[.{D} ]
+				]
+				[.{$\Join (5)$}
+					[.{E} ]
+					[.{F} ]
+				]
+			]
+		]
+	]
+	\end{tikzpicture}
+\caption{Given join tree}
+  \label{jtree}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+  \begin{tabular}{| c | c | c |}
+	\hline
+	Join & SES & TES \\ \hline
+	1 & \{A,B\} & \{A,B,C,E,D\} \\ \hline
+	2 & \{B,C\} & \{B,C,E,D\} \\ \hline
+	3 & \{C,E\} & \{C,E,D\} \\ \hline
+	4 & \{C,D\} & \{C,D\} \\ \hline
+	5 & \{E,F\} & \{E,F\} \\ \hline
+  \end{tabular}
+  \caption{Syntactic- and total eligibility set}
+  \label{relations}
+ \end{figure}
+ 
+ \begin{figure}[H]
+	\centering
+		\tikzstyle{b} = [text centered, thick]
+		%\tikzstyle{c} = [rectangle, draw]
+		\tikzstyle{l} = [draw, -latex',thick]  
+
+\begin{tikzpicture}[-,auto,scale=1.25]
+    \node [b]    (a) {A};
+    \node [b]    (b)   at ([shift={(1,0)}] a) {B};
+    \node [b]    (c)   at ([shift={(1,0)}] b) {C};
+    \node [b]    (d)   at ([shift={(0,-1)}] c) {D};
+    \node [b]    (e)   at ([shift={(1,0)}] c) {E};
+    \node [b]    (f)   at ([shift={(1,0)}] e) {F};
+    \coordinate  (ed)       at ($(e)!0.5!(d)$);  
+    \coordinate  (eed)       at ($(e)!0.75!(ed)$); 
+    \coordinate  (1)       at ([shift={(0,-1)}] eed);   
+    \coordinate  (2)       at ([shift={(0,-1.37)}] b);   
+    \coordinate  (3)       at ([shift={(0,-0.75)}] b);
+    \coordinate  (4)       at ([shift={(0,-0.75)}] a);
+    
+
+    \draw[-] (a) edge (b);
+    \draw[-] (b) edge (c);
+    \draw[-] (c) edge (d);
+    \draw[-] (c) edge (e);
+    \draw[-] (e) edge (f);
+    
+    \draw[-] (ed) edge (c);
+    \draw[-] (ed) edge (d);
+    \draw (ed) edge[->] (e);
+    
+    \draw[-] (eed) edge (1);
+    \draw[-] (1) edge (2);
+    \draw (2) edge[->] (b);
+    
+    \draw[-] (3) edge (4);
+    \draw (4) edge[->] (a);
+    
+\end{tikzpicture}
+	\caption{DPhyp graph}
+	  \label{simpl2}
+\end{figure}
+\end{document}
