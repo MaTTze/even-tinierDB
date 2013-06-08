@@ -40,6 +40,8 @@
 \usepackage{listings}
 \usepackage{ulem}
 \usepackage{amssymb}
+\usepackage{longtable}
+ \usepackage{array}
 
 \usepackage[compact]{titlesec}
 \titlespacing{\section}{0pt}{*10}{*1} % Spacing between sections
@@ -95,7 +97,7 @@
 %----------------------------------------------------------------------------------------
 
 \section{Exercise 1}
-With BFS result in following ordering of nodes: $R_0 < R_1 < R_3 < R_2 < R_4$
+With BFS result in following ordering of nodes: $R_0 < R_1 < R_3 < R_2 < R_4$. Figure \ref{ccp} shows the execution of the \textit{EnumerateCsg(G)} algorithm, and table \ref{cmp} shows the \textit{EnumerateCmp(G,S1)} algorithm. The stars in table \ref{cmp} denote the execution of \textit{EnumerateCsgRec()}. Empty rows depict multiple outputs for the step above them. (See the next pages)
 \begin{figure}[H]
 \centering
   \begin{tabular}{ | c | c | c | c |}
@@ -131,10 +133,85 @@ With BFS result in following ordering of nodes: $R_0 < R_1 < R_3 < R_2 < R_4$
 	\{$R_0, R_1, R_3, R_4$\} & $\{R_0, R_1, R_3, R_4\}$ & $\{R_2\}$ & \{$R_0, R_1, R_2, R_3, R_4$\} \\ \hline 
 	\{$R_0, R_1, R_2, R_3, R_4$\} & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & - \\ \hline 	
   \end{tabular}
-  \caption{Connected Subgraphs (via \textit{EnumerateCsg(G)})}
-  \label{relations}
+  \caption{Connected Subgraph Enumeration}
+  \label{ccp}
  \end{figure}
  
+ \pagebreak
+ 
+\begin{longtable}{|*{4}{>{\centering\arraybackslash}p{3cm}|}}
+	\hline
+	S & X & N & emit \\ \hline \hline
+    	\{$R_4$\} & $\{R_0 .. R_4\}$ & $\emptyset$ & - \\ \hline 
+  	\{$R_2$\} & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & - \\ \hline 
+	\{$R_3$\} & $\{R_0, R_1, R_3\}$ & $\{R_2\}$ & \{$R_2$\} \\ \hline 
+	* \{$R_2$\} & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & - \\ \hline
+	$\{R_2, R_3\}$ & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & - \\ \hline 
+	\{$R_1$\} & $\{R_0, R_1\}$ & $\{R_2, R_4\}$ & \{$R_4$\}\\ \hline 
+	& & & \{$R_2$\} \\ \hline
+	* $\{R_4\}$ & $\{R_0, R_1, R_2, R_4\}$ & $\emptyset$ & - \\ \hline 
+	* $\{R_2\}$ & $\{R_0, R_1, R_2\}$ & $\{R_3\}$ & $\{R_2, R_3\}$ \\ \hline 
+	* $\{R_2, R_3\}$ & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & - \\ \hline 
+	\{$R_1, R_2,$\} & $\{R_0, R_1, R_2\}$ & $\{R_3, R_4\}$ & $\{R_4\}$ \\ \hline 
+	& & & \{$R_3$\} \\ \hline
+	* $\{R_4\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & -\\ \hline 
+	* $\{R_3\}$ & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & - \\ \hline 
+	\{$R_1, R_2, R_3$\} & $\{R_0, R_1, R_2, R_3\}$ & $\{R_4\}$ & $\{R_4\}$ \\ \hline 
+	* $\{R_4\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & -\\ \hline 
+	\{$R_1, R_4$\} & $\{R_0, R_1, R_4\}$ & $\{R_2\}$ & $\{R_2\}$ \\ \hline 
+	* $\{R_2\}$ & $\{R_0, R_1, R_2\}$ & $\{R_3\}$ & $\{R_2, R_3\}$ \\ \hline 
+	* $\{R_2, R_3\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & - \\ \hline 
+	\{$R_1, R_2, R_4$\} & $\{R_0, R_1, R_2, R_4\}$ & $\{R_3\}$ & \{$R_1, R_2, R_3, R_4$\} \\ \hline 
+	* $\{R_3\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & - \\ \hline 
+	\{$R_1, R_2, R_3, R_4$\} & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & - \\ \hline 
+	\{$R_0$\} & $\{R_0\}$ & $\{R_1, R_3\}$ & \{$R_3$\} \\ \hline 
+	& & & \{$R_1$\} \\ \hline
+	* $\{R_3\}$ & $\{R_0, R_1, R_3\}$ & $\{R_2\}$ & $\{R_2, R_3\}$ \\ \hline
+	* $\{R_2, R_3\}$ & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & - \\ \hline
+	* $\{R_1\}$ & $\{R_0, R_1\}$ & $\{R_2, R_4\}$ & $\{R_1, R_2\}$ \\ \hline 
+	& & & \{$R_1, R_4$\} \\ \hline
+ 	* $\{R_1, R_2\}$ & $\{R_0, R_1, R_2, R_4\}$ & $\{R_3\}$ & $\{R_1, R_2, R_3\}$ \\ \hline
+	* $\{R_1, R_2, R_3\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & - \\ \hline
+	* $\{R_1, R_4\}$ & $\{R_0, R_1, R_2, R_4\}$ & $\emptyset$ & - \\ \hline
+	$\{R_0, R_1\}$ & $\{R_0, R_1\}$ & $\{R_2, R_3, R_4\}$ & $\{R_4\}$ \\ \hline
+	& & & \{$R_2$\} \\ \hline
+	& & & \{$R_3$\} \\ \hline
+	* $\{R_4\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & -\\ \hline 
+	* $\{R_2\}$ & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & -\\ \hline 
+	* $\{R_3\}$ & $\{R_0, R_1, R_3\}$ & $\{R_2\}$ & $\{R_2, R_3\}$\\ \hline 
+	* $\{R_2, R_3\}$ & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & -\\ \hline 
+	\{$R_0, R_1, R_2$\} & $\{R_0, R_1, R_2\}$ & $\{R_3, R_4\}$ & \{$R_4$\} \\ \hline 
+	& & & \{$R_3$\} \\ \hline
+	* $\{R_4\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & -\\ \hline 
+	* $\{R_3\}$ & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & -\\ \hline 
+	\{$R_0, R_1, R_4$\} & $\{R_0, R_1, R_4\}$ & $\{R_2, R_3\}$ & $\{R_2\}$ \\ \hline 
+	& & & \{$R_3$\} \\ \hline
+	* $\{R_2\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & -\\ \hline 
+	* $\{R_3\}$ & $\{R_0, R_1, R_3, R_4\}$ & $\{R_2\}$ & $\{R_2, R_3\}$\\ \hline 
+	* $\{R_2, R_3\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & -\\ \hline 
+	\{$R_0, R_1, R_2, R_4$\} & $\{R_0, R_1, R_2, R_4\}$ & $\{R_3\}$ & \{$R_3$\} \\ \hline 
+	* $\{R_3\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & -\\ \hline 
+	\{$R_0, R_3$\} & $\{R_0, R_3\}$ & $\{R_1, R_2\}$ & $\{R_2\}$ \\ \hline 
+	& & & \{$R_1$\} \\ \hline
+	* $\{R_2\}$ & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & -\\ \hline 
+	* $\{R_1\}$ & $\{R_0, R_1, R_3\}$ & $\{R_2\}$ & $\{R_1,R_2\}$\\ \hline 
+	\{$R_0, R_2, R_3$\} & $\{R_0, R_2, R_3\}$ & $\{R_1\}$ & $\{R_1\}$ \\ \hline 
+	* $\{R_1\}$ & $\{R_0, R_1, R_2, R_3\}$ & $\{R_4\}$ & $\{R_1,R_4\}$\\ \hline
+	* $\{R_1, R_4\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & -\\ \hline 
+	$\{R_0, R_1, R_3\}$ & $\{R_0, R_1, R_3\}$ & $\{R_2, R_4\}$ & $\{R_4\}$\\ \hline 
+	& & & \{$R_2$\} \\ \hline
+	* $\{R_4\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & -\\ \hline
+	* $\{R_2\}$ & $\{R_0, R_1, R_2, R_3\}$ & $\emptyset$ & -\\ \hline
+	$\{R_0, R_1, R_3, R_4\}$ & $\{R_0, R_1, R_3\}$ & $\{R_2\}$ & $\{R_2\}$\\ \hline
+	* $\{R_2\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & -\\ \hline 
+	$\{R_0, R_1, R_2, R_3, R_4\}$ & $\{R_0, R_1, R_2, R_3, R_4\}$ & $\emptyset$ & -\\ \hline 	
+ \caption{Enumerating Complementary Subgraphs}
+ \label{cmp}
+  \end{longtable}
+  
+  
+  
+  
 \pagebreak
 
 
