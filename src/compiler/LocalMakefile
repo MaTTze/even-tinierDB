@@ -1,6 +1,8 @@
 include src/compiler/ast/LocalMakefile
 include src/compiler/querygraph/LocalMakefile
 include src/compiler/strategies/LocalMakefile
+include src/compiler/randomized/LocalMakefile
+
 
 
 obj_compiler:=					\
@@ -10,5 +12,6 @@ obj_compiler:=					\
 	bin/compiler/Compiler.o					\
 	$(obj_ast)								\
 	$(obj_qg)								\
-	$(obj_strat)
+	$(obj_strat)							\
+	$(obj_rdm)
 

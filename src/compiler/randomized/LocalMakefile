@@ -1,0 +1,4 @@
+obj_rdm:=					\
+	bin/compiler/randomized/DyckGenerator.o	 \
+	bin/compiler/randomized/Binomial.o
+

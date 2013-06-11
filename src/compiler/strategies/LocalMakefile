@@ -1,4 +1,5 @@
 obj_strat:=					\
 	bin/compiler/strategies/OrderStrategy.o			\
-	bin/compiler/strategies/GOOStrategy.o			
+	bin/compiler/strategies/GOOStrategy.o			\
+	bin/compiler/strategies/DPSizeStrategy.o	
 
