@@ -29,6 +29,7 @@ ASTNode* DPsubStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTN
 
 	std::cout << "Compiler: Running DPsub" << std::endl;
 
+	//vector: <Root of tree, <estimated cardinality, estimated selectivity>>
 	std::vector<std::pair<ASTNode*, std::pair<double, double> > > dpTable(1 <<relations.size(), std::make_pair(nullptr, std::make_pair(0,0)));
 
 	for(unsigned i = 0; i < relations.size(); i++) {
@@ -50,31 +51,32 @@ ASTNode* DPsubStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTN
 		i1 = i&(-i);
 		do {
 			i2 = i - i1;
-			if(i1 == 0 || i2 == 0) {
+
+			if(i1 == 0 || i2 == 0) {		//if any set is empty: continue.
 				i1 = i&(i1 - i);
 				continue;
 			}
 
-			s1 = querygraph.convertBitmapToSet(i1);
+			s1 = querygraph.convertBitmapToSet(i1);		//QueryGraph functions for sets operate on std::set<unsigned>. Convert the bitmaps to such sets.
 			s2 = querygraph.convertBitmapToSet(i2);
-			if (!crossproducts && !querygraph.isConnected(s1,s2)) {
-				i1 = i&(i1 - i);
-				continue;
+			if (!crossproducts && !querygraph.isConnected(s1,s2)) {		
+				i1 = i&(i1 - i);				//if no crossproducts allowed, or sets are not connected: continue.
+				continue;	
 			}  
 
-			p1 = dpTable.at(i1);
+			p1 = dpTable.at(i1);		//get sub trees
 			p2 = dpTable.at(i2);
-			if ((p1.first == nullptr) || (p2.first == nullptr)){
+			if ((p1.first == nullptr) || (p2.first == nullptr)){		//if either of them doesn't exist: continue.
 				i1 = i&(i1 - i);
 				continue;
 			}
 
-			p = createJoinTree(p1,p2);
-			querygraph.addConditionsToJoin(dynamic_cast<JoinNode*>(p.first), s1, s2);
-			p.second.first = querygraph.evalSelectivity(s1, s2)*p1.second.first*p2.second.first;
+			p = createJoinTree(p1,p2);		//create join tree
+			querygraph.addConditionsToJoin(dynamic_cast<JoinNode*>(p.first), s1, s2);	//add correct conditions to it.
+			p.second.first = querygraph.evalSelectivity(s1, s2)*p1.second.first*p2.second.first;	//evaluate estimated selectivity
 
-			if (dpTable.at(i).first == nullptr || dpTable.at(i).second.second > p.second.second) {
-				dpTable.at(i) = p;
+			if (dpTable.at(i).first == nullptr || dpTable.at(i).second.second > p.second.second) {		
+				dpTable.at(i) = p;			//insert into DPTable if no entry exists, or this tree is better than the old one
 			}
 
 			//Print DP-TABLE
@@ -92,7 +94,7 @@ ASTNode* DPsubStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTN
 		} while (i1 != i);
 	}
 
-	return dpTable.at(--i).first;
+	return dpTable.at(--i).first;		//return root of best tree for complete set
 }
 
 std::pair<ASTNode*, std::pair<double, double> > DPsubStrategy::createJoinTree(

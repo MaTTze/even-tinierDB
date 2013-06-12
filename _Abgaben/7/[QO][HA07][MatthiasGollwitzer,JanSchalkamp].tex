@@ -1,0 +1,125 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+\PassOptionsToPackage{fleqn}{amsmath}
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{graphicx}
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\normalfont\scshape} % Make all sections centered, the default font and small caps
+
+\usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usetikzlibrary{automata,positioning}
+\usetikzlibrary{arrows,calc,fit}
+\usepackage{latexsym}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{ulem}
+\usepackage{amssymb}
+\usepackage{longtable}
+ \usepackage{array}
+
+\usepackage[compact]{titlesec}
+\titlespacing{\section}{0pt}{*10}{*1} % Spacing between sections
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{0pt} % Customize the height of the header
+\usepackage{fullpage}
+\usepackage{hyperref}
+
+
+\usepackage{amsmath}
+\setlength{\mathindent}{25.0pt}
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+\def\ojoin{\setbox0=\hbox{$\Join$}%
+  \rule[+0.095ex]{.3em}{.5pt}\llap{\rule[1.35ex]{0.3em}{0.5pt}}}
+\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
+\def\rightouterjoin{\mathbin{\Join\mkern-5.8mu\ojoin}}
+\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\Join\mkern-5.8mu\ojoin}}
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Technische Universit\"at M\"unchen, Query Optimization} \\ [25pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Exercise 7 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Matthias Gollwitzer, Jan Schalkamp} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+\lstset{language=SQL}
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section{Exercise 1}
+Make as usual via \textit{make} command. TPCH data is again expected in \textit{data/tpch/tpch} with semicolons only as delimiter and no other occurrences of them.
+\subsection{DPsub}
+	\begin{itemize}
+		\item Execute via \textbf{./bin/homework7-1}
+		\item \textbf{src/compiler/strategies/DPsubStrategy:} Implements the DPsub algorithm. We are using the algorithm that was introduced in the lecture, which enumerates subsets efficiently. The whole algorithm is essentially a 1:1 conversion from the lecture slides. Only really different part is checking the estimated sizes of operators to be joined, as tinyDB only comes with a Hash Join - so we put the smaller operation left, and the bigger right. There is a crossproduct flag in the header file. It's currently set to true, as it should be beneficial to the query we are running.
+		\item \textbf{src/compiler/querygraph/QueryGraph:} Added the method \textit{convertBitmapToSet()} in order to operate on sets represented each by a bitmap. Other methods added to check if a connection between two sets exists in the query graph.
+	\end{itemize}
+
+\subsection{DPsize}
+	We did it anyway. 
+	\begin{itemize}
+		\item Execute via \textbf{./bin/homework7-1b}
+		\item \textbf{src/compiler/strategies/DPsubStrategy:} Implements the DPsize algorithm as shown in the lecture. Here we combine the efficient subset enumeration with efficient  subset generation (using Gosper's hack\footnote{ \url{http://en.wikipedia.org/wiki/Combinatorial_number_system\#Applications} }).
+	
+	\end{itemize}
+
+\section{Exercise 2}
+	\begin{itemize}
+		\item Execute via \textbf{./bin/homework7-2} (generates a pseudo-random join tree with 4 inner nodes)
+		\item \textbf{src/compiler/randomized/DyckGenerator:} Essentially a 1:1 conversion from the lecture slides. We are not sure if it works for more  than 33 inner nodes. We tend to say no, as C(34) is bigger than a unsigned long long can store.
+		\item \textbf{src/compiler/randomized/Binomial:} Class for calculating binomial coefficients utilising memoization.
+	\end{itemize}
+
+\end{document}

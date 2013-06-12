@@ -42,48 +42,49 @@ ASTNode* DPsizeStrategy::generateJoinTree(QueryGraph querygraph, std::vector<AST
 		set = (1 << i) - 1;
 		limit = (1 << relations.size());
 
-		while (set < limit) {
+		while (set < limit) {		//generate all possible subsets for set size i
 		    std::cout << "DPsize: Relations under consideration: ";
 		    printSet(&querygraph, set);		    
+		   
 		    i1 = set&(-set);
-			do {
-			i2 = set - i1;
-			// Do something with S1 and S2
+			do {		//enumerate all possible permutations of these subsets
+				i2 = set - i1;
+				// Do something with S1 and S2
 
-			if(i1 == 0 || i2 == 0) {
-				i1 = i&(i1 - set);
-				continue;
-			}
+				if(i1 == 0 || i2 == 0) {
+					i1 = i&(i1 - set);
+					continue;
+				}
 
-			s1 = querygraph.convertBitmapToSet(i1);
-			s2 = querygraph.convertBitmapToSet(i2);
-			if (!crossproducts && !querygraph.isConnected(s1,s2)) {
-				i1 = i&(i1 - set);
-				continue;
-			}  
+				s1 = querygraph.convertBitmapToSet(i1);
+				s2 = querygraph.convertBitmapToSet(i2);
+				if (!crossproducts && !querygraph.isConnected(s1,s2)) {
+					i1 = i&(i1 - set);
+					continue;
+				}  
 
-			p1 = dpTable.at(i1);
-			p2 = dpTable.at(i2);
-			if ((p1.first == nullptr) || (p2.first == nullptr)){
-				i1 = i&(i1 - set);
-				continue;
-			}
+				p1 = dpTable.at(i1);
+				p2 = dpTable.at(i2);
+				if ((p1.first == nullptr) || (p2.first == nullptr)){
+					i1 = i&(i1 - set);
+					continue;
+				}
 
-			p = createJoinTree(p1,p2);
-			querygraph.addConditionsToJoin(dynamic_cast<JoinNode*>(p.first), s1, s2);
-			p.second.first = querygraph.evalSelectivity(s1, s2)*p1.second.first*p2.second.first;
+				p = createJoinTree(p1,p2);
+				querygraph.addConditionsToJoin(dynamic_cast<JoinNode*>(p.first), s1, s2);
+				p.second.first = querygraph.evalSelectivity(s1, s2)*p1.second.first*p2.second.first;
 
-			if (dpTable.at(set).first == nullptr || dpTable.at(set).second.second > p.second.second) {
-				dpTable.at(set) = p;
-			}
+				if (dpTable.at(set).first == nullptr || dpTable.at(set).second.second > p.second.second) {
+					dpTable.at(set) = p;
+				}
 
-			//Print DP-TABLE
-			//std::cout << "DPsub: Subsets in integer representation are: " << i1 << " - " << i2 << std::endl;
-			printSubsets(&querygraph, i1, i2);
+				//Print DP-TABLE
+				//std::cout << "DPsub: Subsets in integer representation are: " << i1 << " - " << i2 << std::endl;
+				printSubsets(&querygraph, i1, i2);
 
-			lastSet = set;
+				lastSet = set;
 
-			i1 = set&(i1 - set);
+				i1 = set&(i1 - set);
 			} while (i1 != set);
 			std::cout << "DPsize: Resulting join tree is: " << std::endl;
 			if (dpTable.at(set).first == nullptr)
@@ -92,7 +93,7 @@ ASTNode* DPsizeStrategy::generateJoinTree(QueryGraph querygraph, std::vector<AST
 				ASTPrinter::print(dpTable.at(set).first);
 			std::cout << "-------------" << std::endl;
 
-		    // Gosper's hack:
+		    // Gosper's hack: Here be dragons!
 		    unsigned c = set & -set;
 		    unsigned r = set + c;
 		    set = (((r^set) >> 2) / c) | r;
