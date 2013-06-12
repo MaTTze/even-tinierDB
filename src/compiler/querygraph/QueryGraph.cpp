@@ -73,7 +73,6 @@ double QueryGraph::evalSelectivity(std::set<unsigned> bindings1, std::set<unsign
 //Checks if a set of relations is somehow connected to another set of bindings
 bool QueryGraph::isConnected(std::set<unsigned> bindings1, std::set<unsigned> bindings2) {
 	bool ret = false;
-	std::cout << "wtf" << std::endl;
 	for(auto it = bindings1.begin(); it != bindings1.end(); it++) {
 		for(auto it2 = bindings2.begin(); it2 != bindings2.end(); it2++) {
 			auto e = edges.end();		//"init" e
@@ -89,7 +88,6 @@ bool QueryGraph::isConnected(std::set<unsigned> bindings1, std::set<unsigned> bi
 			}
 		}
 	}
-	std::cout << "not connected" << std::endl;
 	return ret;
 }
 
@@ -115,10 +113,8 @@ void QueryGraph::addConditionsToJoin(JoinNode* n, std::set<unsigned> bindings1, 
 			} else {
 				e = edges.find(std::make_pair(*it2, *it));
 			}
-			if(e != edges.end()){
-				std::cout << *it << " with " << *it2 << std::endl;
+			if(e != edges.end())
 				n->addCondition(std::make_pair(*it, *it2), e->second->getConditions());
-			}
 		}
 	}
 }

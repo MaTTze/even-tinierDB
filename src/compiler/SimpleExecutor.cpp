@@ -75,7 +75,6 @@ std::unique_ptr<Operator> SimpleExecutor::executeSelection(SelectionNode* n) {
 std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 	std::unique_ptr<Operator> leftOp(executeNode(n->getLeft()));		//evaluate left subtree
 	std::unique_ptr<Operator> rightOp(executeNode(n->getRight()));		//evaluate right subtree
-	std::cout << "Build Join" << std::endl;
 
 	auto joins = n->getConditions();		//get all join conditions associated with this join node (<unsigned,unsigned> mapped to set<string, string>)
 
@@ -83,9 +82,12 @@ std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 
 	if (joins.empty()){			//if there are no join conditions, this evaluates as a cross product
 		std::unique_ptr<Operator> op(new CrossProduct(std::move(leftOp),std::move(rightOp)));
+		std::cout << "Build Crossproduct" << std::endl;
 		return std::move(op);
 	}
 
+	std::cout << "Build Join" << std::endl;
+	
 	bool first = true;		//flag for first iteration.
 	for (auto it = joins.begin(); it != joins.end();it++){			//iterate over the map of all joins of this node
 		Tablescan* scanLeft = tablescans.at(it->first.first);			//Get tablescans for the key-pair of this entry of the map
