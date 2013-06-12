@@ -7,6 +7,7 @@
 #include "DPsubStrategy.hpp"
 #include "../ast/ASTNode.hpp"
 #include "../ast/JoinNode.hpp"
+#include "../ast/ASTPrinter.hpp"
 #include <vector>
 #include <set>
 #include <math.h>
@@ -24,39 +25,64 @@ DPsubStrategy::~DPsubStrategy() {
 }
 
 ASTNode* DPsubStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTNode*>& relations) {
-	bool crossproducts = false;
+
 	std::cout << "Compiler: Running DPsub" << std::endl;
 
-	amountRelations = relations.size();
-	std::vector<std::set<ASTNode*> > dpTable(pow(2.0, (double)relations.size()));
+	std::vector<std::pair<ASTNode*, std::pair<double, double> > > dpTable(1 <<relations.size(), std::make_pair(nullptr, std::make_pair(0,0)));
 
 	for(unsigned i = 0; i < relations.size(); i++) {
-		dpTable.at(1 << i).insert(relations.at(i));
+		dpTable.at(1 << i) = std::make_pair(relations.at(i), std::make_pair(querygraph.getNode(1)->getECardinality(),0));
 	}
 
-	unsigned S, S1, S2;
-
-	for(unsigned i = 2; i <= pow(2.0, (double)relations.size()) - 1; i++) {
-		S = getCurrentSet(i);
-		S1 = S&(-S);
+	unsigned i, i1, i2;
+	std::set<unsigned> s1, s2;
+	std::pair<ASTNode*, std::pair<double, double> > p1, p2, p;
+	for(i = 2; i <= (1 << relations.size()) - 1; i++) {
+		std::cout << i << std::endl;
+		i1 = i&(-i);
 		do {
-			S2 = S - S1;
-			// Do something with S1 and S2
-
-			S1 = S&(S1 - S);
-		} while (S1 != S);
+			i2 = i - i1;
+			std::cout << i1 << " - " << i2 << std::endl;
+			s1 = querygraph.convertBitmapToSet(i1);
+			s2 = querygraph.convertBitmapToSet(i2);
+			if (!crossproducts && !querygraph.isConnected(s1,s2)) {
+				i1 = i&(i1 - i);
+				continue;
+			}
+			p1 = dpTable.at(i1);
+			p2 = dpTable.at(i2);
+			if ((p1.first == nullptr) || (p2.first == nullptr)){
+				i1 = i&(i1 - i);
+				continue;
+			}
+			p = createJoinTree(p1,p2);
+			querygraph.addConditionsToJoin(dynamic_cast<JoinNode*>(p.first), s1, s2);
+			p.second.first = querygraph.evalSelectivity(s1, s2)*p1.second.first*p2.second.first;
+			if (dpTable.at(i).first == nullptr || dpTable.at(i).second.second > p.second.second) {
+				dpTable.at(i) = p;
+			}
+			i1 = i&(i1 - i);
+		} while (i1 != i);
 	}
-
-	return relations.at(0);
+	for(i = 2; i <= (1 << relations.size()) - 1; i++) {
+		std::cout << i << ": " << std::endl;
+		if (dpTable.at(i).first == nullptr){
+			std::cout << "null" << std::endl;
+			continue;
+		}
+		ASTPrinter::print(dpTable.at(i).first);
+	}
+	return dpTable.at(--i).first;
 }
 
-unsigned DPsubStrategy::getCurrentSet(unsigned i) {
-	unsigned ret = 0;
-
-	for(unsigned j = 1; j < amountRelations; j++) {
-		if((unsigned)floor(i / pow(2.0, j - 1.0)) % 2 == 1)
-			ret |= 1 << j;
+std::pair<ASTNode*, std::pair<double, double> > DPsubStrategy::createJoinTree(
+		std::pair<ASTNode*, std::pair<double, double> > tree1,
+		std::pair<ASTNode*, std::pair<double, double> > tree2) {
+	//compare hashjoin costs (1.2 is irrelevant)
+	if (tree1.second.first > tree2.second.first){
+		return std::make_pair(new JoinNode(tree2.first, tree1.first), std::make_pair(0, tree2.second.second*1.2));//set size afterwards
+	} else {
+		return std::make_pair(new JoinNode(tree1.first, tree2.first), std::make_pair(0, tree1.second.second*1.2));//set size afterwards
 	}
-
-	return ret;
 }
+

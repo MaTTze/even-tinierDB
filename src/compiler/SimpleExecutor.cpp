@@ -106,7 +106,7 @@ std::unique_ptr<Operator> SimpleExecutor::executeJoin(JoinNode* n) {
 
 			if(first) { 	//First iteration will be a HashJoin.
 				//construct hashjoin of child nodes and first registers.
-				std::unique_ptr<Operator> hj(new HashJoin(std::move(rightOp), std::move(leftOp), regRight, regLeft));
+				std::unique_ptr<Operator> hj(new HashJoin(std::move(leftOp), std::move(rightOp), regLeft, regRight));
 				op = std::move(hj);
 				first = false;
 			}

@@ -17,8 +17,9 @@ public:
 	virtual ASTNode* generateJoinTree(QueryGraph, std::vector<ASTNode*>&);
 
 private:
-	unsigned amountRelations;
-	unsigned getCurrentSet(unsigned);
+	std::pair<ASTNode*, std::pair<double, double> > createJoinTree(std::pair<ASTNode*, std::pair<double, double> >, std::pair<ASTNode*, std::pair<double, double> >);
+
+	static const bool crossproducts = true;
 };
 
 #endif /* DPSUBSTRATEGY_HPP_ */
