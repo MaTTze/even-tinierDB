@@ -15,10 +15,11 @@ class DyckGenerator {
 public:
 	static std::list<int> generateWord(int, int);
 	static void printWord(std::list<int>);
+	static unsigned long long getCatalanNumber(int);
 
 private:
-	static int p(Binomial*, int, int);
-	static int q(Binomial*, int, int, int);
+	static unsigned long long p(Binomial*, int, int);
+	static unsigned long long q(Binomial*, int, int, int);
 };
 
 

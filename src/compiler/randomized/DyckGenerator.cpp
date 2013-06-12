@@ -6,30 +6,33 @@
  */
 #include "DyckGenerator.hpp"
 #include <iostream>
-#include <math.h>
 
+/*
+	Generates the Dyck word for the tree with n inner nodes and rank r.
+	Returns list representation of the Dyck word.
+	>>  Note: not sure if working for n > 33  <<
+*/
 std::list<int> DyckGenerator::generateWord(int n, int r) {
  	int open = 1;
  	int close = 0;
  	int pos = 1;
  	std::list<int> encoding; 
- 	Binomial b = Binomial(2*n);
+ 	Binomial b = Binomial(2*n);		//class for calculating binomial coefficients
 
- 	while(open-1 < n) {
- 		int k = DyckGenerator::q(&b,n, open+close, open-close);
+ 	while(open-1 < n) {		// open-1 is equal to encoding.size()
+ 		unsigned long long k = DyckGenerator::q(&b,n, open+close, open-close);		//calculate number of different paths from here
 
- 		if(k <= r) { 
- 			r -= k;
+ 		if(k <= r) { 		
+ 			r -= k;			//closing bracket found. decrease r, increase count of closing brackets.
  			++close;
  		} else {
- 			encoding.push_back(pos);
+ 			encoding.push_back(pos);	//opening bracket found. Append position to list.
  			++open;
  		}
- 		++pos;
+ 		++pos;		//next position
  	}
 
  	return encoding;
-
 }
 
 /*
@@ -47,7 +50,7 @@ void DyckGenerator::printWord(std::list<int> encoding) {
 		x = *(it);
 	}
 	
-	for(int i = x; i < encoding.size()*2; i++) 
+	for(unsigned i = x; i < encoding.size()*2; i++) 
 		std::cout << ")";
 
 	std::cout << std::endl;
@@ -62,7 +65,7 @@ void DyckGenerator::printWord(std::list<int> encoding) {
 		x = *(it);
 	}
 
-	for(int i = x; i < encoding.size()*2; i++) 
+	for(unsigned i = x; i < encoding.size()*2; i++) 
 		std::cout << "0";
 
 	std::cout << std::endl;
@@ -76,13 +79,18 @@ void DyckGenerator::printWord(std::list<int> encoding) {
 	std::cout << std::endl;
 }
 
-int DyckGenerator::p(Binomial* b, int i, int j) {
-	double factor = (((double)j+1)/((double)i+1));
-	double ret = factor * (double)b->Choose((i+1),((i+j)/2 + 1));
-	
-	return (int)ret;
+unsigned long long DyckGenerator::getCatalanNumber(int n) {
+	Binomial b = Binomial(5*n);
+
+	return b.Choose(2*n, n) / (n+1.0);
 }
 
-int DyckGenerator::q(Binomial* b, int n, int i, int j) {
+unsigned long long DyckGenerator::p(Binomial* b, int i, int j) {
+	double factor = (j + 1.0) / (i + 1.0);
+	
+	return factor * b->Choose((i+1),((i+j)/2 + 1));
+}
+
+unsigned long long DyckGenerator::q(Binomial* b, int n, int i, int j) {
 	return DyckGenerator::p(b, 2*n - i, j);
 }

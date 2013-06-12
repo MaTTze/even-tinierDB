@@ -8,13 +8,24 @@
 #include "compiler/randomized/DyckGenerator.hpp"
 #include <iostream>
 #include <list>
-//---------------------------------------------------------------------------
-using namespace std;
-//---------------------------------------------------------------------------
+#include <sys/time.h>
+
+
+#define TREESIZE 4		// only works up to 33, as C(34) > ULL_MAX
+
 int main()
 {
-  	std::list<int> encoding = DyckGenerator::generateWord(100,7);
+	struct timeval time; 
+    gettimeofday(&time,NULL);
+    std::srand((time.tv_sec) + (time.tv_usec));
 
+	unsigned long long c = DyckGenerator::getCatalanNumber(TREESIZE);
+	unsigned long long treeNum = std::rand() % c;
+
+	std::cout << "Generating tree " << treeNum << " with " << TREESIZE << " inner nodes:" << std::endl;
+
+	//Generates the list representation of the Dyck word. 
+  	std::list<int> encoding = DyckGenerator::generateWord(TREESIZE,treeNum);
    	DyckGenerator::printWord(encoding);
 }
 //---------------------------------------------------------------------------

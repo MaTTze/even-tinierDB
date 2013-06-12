@@ -4,10 +4,10 @@
 Binomial::Binomial(int Max)
 {
     max = Max+1;
-    table = new unsigned int * [max]();
+    table = new unsigned long long * [max]();
     for (int i=0; i < max; i++)
     {
-        table[i] = new unsigned int[max]();
+        table[i] = new unsigned long long [max]();
 
         for (int j = 0; j < max; j++)
         {
@@ -25,7 +25,7 @@ Binomial::~Binomial()
     delete table;
 }
 
-unsigned long Binomial::Choose(unsigned int n, unsigned int k)
+unsigned long long Binomial::Choose(unsigned int n, unsigned int k)
 {
     if (n < k) return 0;
     if (k == 0 || n==1 ) return 1;
@@ -42,7 +42,7 @@ unsigned long Binomial::Choose(unsigned int n, unsigned int k)
     return table[n][k];
 }
 
-bool Binomial::Contains(unsigned int n, unsigned int k)
+bool Binomial::Contains(unsigned long long n, unsigned long long k)
 {
     if (table[n][k] == 0) 
     {

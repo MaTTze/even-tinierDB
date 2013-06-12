@@ -5,13 +5,13 @@ class Binomial {
 public:
     Binomial(int);
     ~Binomial();
-     unsigned long Choose(unsigned int, unsigned int);
+     unsigned long long Choose(unsigned int, unsigned int);
 
 private:
-    bool Contains(unsigned int, unsigned int);
+    bool Contains(unsigned long long, unsigned long long);
 
     int max;
-    unsigned int **table;
+    unsigned long long **table;
 };
 
 
