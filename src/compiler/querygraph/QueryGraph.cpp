@@ -70,6 +70,20 @@ double QueryGraph::evalSelectivity(std::set<unsigned> bindings1, std::set<unsign
 	return selectivity;
 }
 
+//Evaluates the estimated selectivity of a join from a set of relations to another set of relations (operates on bitmaps!)
+double QueryGraph::evalSelectivity(unsigned bindings1, unsigned bindings2) {
+	std::set<unsigned> b1, b2;
+
+	for(int i = 0; i < nodes.size(); i++) {
+		if(bindings1 | 1 << i)
+			b1.insert(1 << i);
+		if(bindinsg2 | 1 << i)
+			b2.inset(1 << i);
+	}
+
+	return evalSelectivity(b1, b2);‚
+}
+
 //Adds all join conditions present between two sets of nodes to a single join node (compare to ::evalSelectivity)
 void QueryGraph::addConditionsToJoin(JoinNode* n, std::set<unsigned> bindings1, std::set<unsigned> bindings2) {
 	for(auto it = bindings1.begin(); it != bindings1.end(); it++) {

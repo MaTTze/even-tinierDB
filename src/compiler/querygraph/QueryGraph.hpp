@@ -37,6 +37,8 @@ public:
 
 	double evalSelectivity(std::set<unsigned>, std::set<unsigned>);
 
+	double evalSelectivity(unsigned, unsigned);
+
 	void addConditionsToJoin(JoinNode*, std::set<unsigned>, std::set<unsigned>);
 
 	void print();
