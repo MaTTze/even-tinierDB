@@ -70,18 +70,39 @@ double QueryGraph::evalSelectivity(std::set<unsigned> bindings1, std::set<unsign
 	return selectivity;
 }
 
-//Evaluates the estimated selectivity of a join from a set of relations to another set of relations (operates on bitmaps!)
-double QueryGraph::evalSelectivity(unsigned bindings1, unsigned bindings2) {
-	std::set<unsigned> b1, b2;
+//Checks if a set of relations is somehow connected to another set of bindings
+bool QueryGraph::isConnected(std::set<unsigned> bindings1, std::set<unsigned> bindings2) {
+	bool ret = false;
 
-	for(int i = 0; i < nodes.size(); i++) {
-		if(bindings1 | 1 << i)
-			b1.insert(1 << i);
-		if(bindinsg2 | 1 << i)
-			b2.inset(1 << i);
+	for(auto it = bindings1.begin(); it != bindings1.end(); it++) {
+		for(auto it2 = bindings2.begin(); it2 != bindings2.end(); it2++) {
+			auto e = edges.end();		//"init" e
+
+			//if an edge between the current binding1 and binding2 exists, get its selectivity and multiply it by the current selectivity.
+			if(*it > *it2) {		//check if binding1 is bigger than binding2, as we inserted them in descending order
+				e = edges.find(std::make_pair(*it, *it2));	
+			} else {
+				e = edges.find(std::make_pair(*it2, *it));
+			}
+			if(e != edges.end()) {
+				return true;
+			}
+		}
 	}
 
-	return evalSelectivity(b1, b2);‚
+	return ret;
+}
+
+//Converts a bitmap that represents a set of relations to a set of relations
+std::set<unsigned> QueryGraph::convertBitmapToSet(unsigned map) {
+	std::set<unsigned> set;
+
+	for(int i = 0; i < nodes.size(); i++) {
+		if(map & 1 << i)
+			set.insert(1 << i);
+	}
+
+	return set;
 }
 
 //Adds all join conditions present between two sets of nodes to a single join node (compare to ::evalSelectivity)

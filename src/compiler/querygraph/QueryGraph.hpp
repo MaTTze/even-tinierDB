@@ -37,7 +37,9 @@ public:
 
 	double evalSelectivity(std::set<unsigned>, std::set<unsigned>);
 
-	double evalSelectivity(unsigned, unsigned);
+	bool isConnected(std::set<unsigned>, std::set<unsigned>) {
+
+	std::set<unsigned> convertBitmapToSet(unsigned);
 
 	void addConditionsToJoin(JoinNode*, std::set<unsigned>, std::set<unsigned>);
 
