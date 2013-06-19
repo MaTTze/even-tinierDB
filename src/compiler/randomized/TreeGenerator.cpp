@@ -8,6 +8,8 @@
 #include "DyckGenerator.hpp"
 #include "../ast/JoinNode.hpp"
 #include "../ast/TablescanNode.hpp"
+#include "../ast/SelectionNode.hpp"
+
 
 #include <iostream>
 #include <list>
@@ -80,6 +82,21 @@ ASTNode* TreeGenerator::generateJoin(std::vector<int> structure, std::vector<AST
 	}
 
 	JoinNode* n = new JoinNode(generateJoin(leftStructure, leftPermutation), generateJoin(rightStructure, rightPermutation));
+	std::set<unsigned> bindings1;
+	for(auto it = leftPermutation.begin(); it != leftPermutation.end(); it++) {
+		if(ASTNode::Type::Tablescan == (*it)->getType()) 
+			bindings1.insert(dynamic_cast<TablescanNode*>(*it)->getRelation());
+		else if(ASTNode::Type::Selection == (*it)->getType())
+			bindings1.insert(dynamic_cast<SelectionNode*>(*it)->getBinding());
+	}
+	std::set<unsigned> bindings2;
+	for(auto it = rightPermutation.begin(); it != rightPermutation.end(); it++) {
+		if(ASTNode::Type::Tablescan == (*it)->getType())
+			bindings2.insert(dynamic_cast<TablescanNode*>(*it)->getRelation());
+		else if(ASTNode::Type::Selection == (*it)->getType())
+			bindings2.insert(dynamic_cast<SelectionNode*>(*it)->getBinding());
+	}
+	querygraph->addConditionsToJoin(n, bindings1, bindings2);
 
 	return dynamic_cast<ASTNode*>(n);
 }

@@ -14,7 +14,7 @@ int main()
    Database db;
    db.open("data/tpch/tpch");
    Parser p = Parser(&db);
-   std::string qry = "select * from orders o, lineitem l, customer c, customer c2, orders k where ";
+   std::string qry = "select * from orders o, lineitem l, customer c, customer c2, orders k where o.o_orderkey=l.l_orderkey and o.o_custkey=c.c_custkey and c.c_name=Customer#000014993";
    std::cout << "Parsing query: " << qry << std::endl;
    Query query = p.parse(qry);
    std::cout << "Parsed." << std::endl;
