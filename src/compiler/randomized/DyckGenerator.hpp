@@ -8,13 +8,13 @@
 #ifndef DYCKGENERATOR_HPP_
 #define DYCKGENERATOR_HPP_
 #include <string>
-#include <list>
+#include <vector>
 #include "Binomial.hpp"
 
 class DyckGenerator {
 public:
-	static std::list<int> generateWord(int, int);
-	static void printWord(std::list<int>);
+	static std::vector<int> generateWord(int, int);
+	static void printWord(std::vector<int>);
 	static unsigned long long getCatalanNumber(int);
 
 private:

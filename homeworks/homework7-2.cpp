@@ -7,7 +7,7 @@
 #include "compiler/SimpleExecutor.hpp"
 #include "compiler/randomized/DyckGenerator.hpp"
 #include <iostream>
-#include <list>
+#include <vector>
 #include <sys/time.h>
 
 
@@ -25,7 +25,9 @@ int main()
 	std::cout << "Generating tree " << treeNum << " with " << TREESIZE << " inner nodes:" << std::endl;
 
 	//Generates the list representation of the Dyck word. 
-  	std::list<int> encoding = DyckGenerator::generateWord(TREESIZE,treeNum);
+  	//std::vector<int> encoding = DyckGenerator::generateWord(TREESIZE,treeNum);
+  	  	std::vector<int> encoding = DyckGenerator::generateWord(5,6);
+
    	DyckGenerator::printWord(encoding);
 }
 //---------------------------------------------------------------------------

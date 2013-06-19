@@ -12,11 +12,11 @@
 	Returns list representation of the Dyck word.
 	>>  Note: not sure if working for n > 33  <<
 */
-std::list<int> DyckGenerator::generateWord(int n, int r) {
+std::vector<int> DyckGenerator::generateWord(int n, int r) {
  	int open = 1;
  	int close = 0;
  	int pos = 1;
- 	std::list<int> encoding; 
+ 	std::vector<int> encoding; 
  	Binomial b = Binomial(2*n);		//class for calculating binomial coefficients
 
  	while(open-1 < n) {		// open-1 is equal to encoding.size()
@@ -38,7 +38,7 @@ std::list<int> DyckGenerator::generateWord(int n, int r) {
 /*
 	Prints a Dyck word given in list representation
 */
-void DyckGenerator::printWord(std::list<int> encoding) {
+void DyckGenerator::printWord(std::vector<int> encoding) {
 	
 	// Bracket Notation
 	int x = 0;

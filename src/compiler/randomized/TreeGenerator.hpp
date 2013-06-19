@@ -12,6 +12,7 @@
 #include "Binomial.hpp"
 #include <random>
 #include <vector>
+#include <list>
 
 class TreeGenerator {
 public:
@@ -20,6 +21,7 @@ public:
 	ASTNode* generateTree(unsigned, unsigned);
 
 private:
+	ASTNode* generateJoin(std::vector<int>, std::vector<ASTNode*>);
 	std::vector<ASTNode*> getPermutation(unsigned);
 	unsigned factorial(unsigned);
 	
