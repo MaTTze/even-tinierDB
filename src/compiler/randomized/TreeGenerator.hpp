@@ -24,6 +24,8 @@ private:
 	ASTNode* generateJoin(std::vector<int>, std::vector<ASTNode*>);
 	std::vector<ASTNode*> getPermutation(unsigned);
 	unsigned factorial(unsigned);
+	void addConditionsToJoin(JoinNode*, QueryGraph*, std::vector<ASTNode*>, std::vector<ASTNode*>);
+
 	
 	std::uniform_int_distribution<unsigned> distStructure;
 	std::uniform_int_distribution<unsigned> distPermutation;
