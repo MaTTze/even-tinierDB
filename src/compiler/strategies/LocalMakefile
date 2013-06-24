@@ -3,5 +3,6 @@ obj_strat:=					\
 	bin/compiler/strategies/GOOStrategy.o			\
 	bin/compiler/strategies/DPsubStrategy.o			\
 	bin/compiler/strategies/DPsizeStrategy.o		\
+	bin/compiler/strategies/QuickPickTree.o 		\
 	bin/compiler/strategies/QuickPickStrategy.o
 

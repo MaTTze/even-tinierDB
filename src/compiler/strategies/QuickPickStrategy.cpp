@@ -1,61 +1,49 @@
 /*
  * QuickPickStrategy.cpp
  *
- *  Created on: June 19, 2013
+ *  Created on: June 24, 2013
  *      Author: jan
  */
 #include "QuickPickStrategy.hpp"
-#include "../ast/ASTNode.hpp"
+#include "QuickPickTree.hpp"
 #include "../ast/JoinNode.hpp"
-#include "../ast/ASTPrinter.hpp"
-#include "../randomized/DyckGenerator.hpp"
-#include "../randomized/TreeGenerator.hpp"
-#include <vector>
-#include <set>
-#include <math.h>
-#include <limits>
-#include <tuple>
-#include <math.h>
-#include <string>
+#include "../querygraph/Edge.hpp"
+#include <iostream>
+
 
 QuickPickStrategy::QuickPickStrategy() {
-	// TODO Auto-generated constructor stub
-
+	std::random_device rd;
+	mt.seed(rd());
 }
 
 QuickPickStrategy::~QuickPickStrategy() {
 	// TODO Auto-generated destructor stub
 }
 
-ASTNode* QuickPickStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTNode*>& rels) {
-	
-	std::cout << "Compiler: Running Quickpick" << std::endl;
+ASTNode* QuickPickStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTNode*>& relations) {
+	std::cout << "Compiler: Running Quick Pick" << std::endl;
 
-	TreeGenerator tg = TreeGenerator(rels, &querygraph);
+	std::map<std::pair<unsigned, unsigned>, Edge*> edges_tmp = querygraph.getEdges();
+	std::vector<std::pair<unsigned, unsigned> > edges;
 
-	return tg.generateRandomTree();		//return root of best tree for complete set
-}
-
-std::pair<ASTNode*, std::pair<double, double> > QuickPickStrategy::createJoinTree(
-		std::pair<ASTNode*, std::pair<double, double> > tree1,
-		std::pair<ASTNode*, std::pair<double, double> > tree2) {
-	//compare hashjoin costs (1.2 is irrelevant)
-	if (tree1.second.first > tree2.second.first){
-		return std::make_pair(new JoinNode(tree2.first, tree1.first), std::make_pair(0, tree2.second.second*1.2));//set size afterwards
-	} else {
-		return std::make_pair(new JoinNode(tree1.first, tree2.first), std::make_pair(0, tree1.second.second*1.2));//set size afterwards
-	}
-}
-
-std::vector<ASTNode*> QuickPickStrategy::getPermutation(std::vector<ASTNode*>& list, unsigned rank) {
-	std::vector<ASTNode*> relations;
-	ASTNode* tmp;
-	for(unsigned i = list.size(); i > 0; i++) {
-		tmp = list.at(i-1);
-		relations.at(i-1) = list.at(rank % i);
-		relations.at(rank % i) = tmp;
-		rank = floor((double)rank / i);
+	for(auto it = edges_tmp.begin(); it != edges_tmp.end(); it++) {
+		edges.push_back((*it).first);
 	}
 
-	return relations;
+	QuickPickTree qpt = QuickPickTree(relations, &querygraph);
+	std::pair<unsigned, unsigned> edge;
+	ASTNode* n;
+	unsigned rdmIndex;
+
+	while(qpt.getTreeCount() > 1) {
+		std::uniform_int_distribution<unsigned> dist(0, edges.size());
+		rdmIndex = dist(mt);
+		edge = edges.at(rdmIndex);
+		edges.erase(edges.begin()+rdmIndex);
+
+		n = qpt.unionTrees(edge.first, edge.second);
+	}
+
+	return n;
 }
+
