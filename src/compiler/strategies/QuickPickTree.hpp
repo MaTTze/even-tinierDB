@@ -19,7 +19,7 @@ public:
 
 	class QPNode {
 	public:
-		QPNode(ASTNode* n, std::set<unsigned> bindings):isRoot(true), parent(dynamic_cast<QPNode*>(n)), relations(bindings) {} 
+		QPNode(ASTNode* n, std::set<unsigned> bindings):isRoot(true), parent(reinterpret_cast<QPNode*>(n)), relations(bindings) {}
 		
 		QPNode* getRoot() {
 			if(isRoot)
@@ -36,7 +36,7 @@ public:
 		}
 
 		ASTNode* getASTNode() {
-			return (ASTNode*)parent;
+			return reinterpret_cast<ASTNode*>(parent);
 		}
 
 		void addRelations(std::set<unsigned> rels) {
@@ -54,6 +54,7 @@ public:
 
 	unsigned getTreeCount();
 	ASTNode* unionTrees(unsigned, unsigned);
+	ASTNode* crossproductify();
 
 private:
 	std::vector<QPNode*> nodes;

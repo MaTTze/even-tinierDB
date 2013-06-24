@@ -27,7 +27,7 @@ ASTNode* QuickPickStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<
 	std::vector<std::pair<unsigned, unsigned> > edges;
 
 	for(auto it = edges_tmp.begin(); it != edges_tmp.end(); it++) {
-		edges.push_back((*it).first);
+		edges.push_back(it->first);
 	}
 
 	QuickPickTree qpt = QuickPickTree(relations, &querygraph);
@@ -36,7 +36,12 @@ ASTNode* QuickPickStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<
 	unsigned rdmIndex;
 
 	while(qpt.getTreeCount() > 1) {
-		std::uniform_int_distribution<unsigned> dist(0, edges.size());
+		std::cout << qpt.getTreeCount() << std::endl;
+		if (edges.size() == 0) {
+			n = qpt.crossproductify();
+			break;
+		}
+		std::uniform_int_distribution<unsigned> dist(0, edges.size()-1);
 		rdmIndex = dist(mt);
 		edge = edges.at(rdmIndex);
 		edges.erase(edges.begin()+rdmIndex);

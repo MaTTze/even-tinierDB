@@ -14,7 +14,7 @@ QuickPickTree::QuickPickTree(std::vector<ASTNode*> relations, QueryGraph* qg) {
 	this->qg = qg;
 
 	for(unsigned i = 0; i < relations.size(); i++) {
-		nodes.push_back(new QPNode(relations.at(i), std::set<unsigned>({i})));
+		nodes.push_back(new QuickPickTree::QPNode(relations.at(i), std::set<unsigned>({i})));
 	}
 }
 
@@ -49,3 +49,18 @@ ASTNode* QuickPickTree::unionTrees(unsigned i1, unsigned i2) {
 	return nullptr;
 }
 
+ASTNode* QuickPickTree::crossproductify() {
+	std::set<ASTNode*> trees;
+	for (auto it = nodes.begin(); it != nodes.end(); it++){
+		trees.insert((*it)->getRoot()->getASTNode());
+	}
+	ASTNode* currentRoot = (*trees.begin());
+	ASTNode* tmp;
+	for (auto it = ++trees.begin(); it != trees.end(); it++){
+		tmp = new JoinNode(currentRoot,*it);
+		currentRoot->setParent(tmp);
+		(*it)->setParent(tmp);
+		currentRoot = tmp;
+	}
+	return currentRoot;
+}
