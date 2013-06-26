@@ -10,6 +10,7 @@ obj_compiler:=					\
 	bin/compiler/SimpleExecutor.o 			\
 	bin/compiler/QueryGraphCompiler.o		\
 	bin/compiler/Compiler.o					\
+	bin/compiler/CostCalculator.o					\
 	$(obj_ast)								\
 	$(obj_qg)								\
 	$(obj_strat)							\
