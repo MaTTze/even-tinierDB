@@ -21,7 +21,7 @@ TreeGenerator::TreeGenerator(std::vector<ASTNode*>& rels, QueryGraph* qg) {
 	std::random_device rd;
 	mt.seed(rd());
 
-	std::uniform_int_distribution<unsigned> dist1(0, (unsigned)DyckGenerator::getCatalanNumber(relations.size()-1));		//dirty cast. Maybe rethink ULL usage in DyckGenerator.
+	std::uniform_int_distribution<unsigned> dist1(0, (unsigned)DyckGenerator::getCatalanNumber(relations.size()-1)-1);		//dirty cast. Maybe rethink ULL usage in DyckGenerator.
 	std::uniform_int_distribution<unsigned> dist2(0, factorial(relations.size()));
 
 	distStructure = dist1; 
@@ -35,6 +35,7 @@ ASTNode* TreeGenerator::generateRandomTree() {
 
 ASTNode* TreeGenerator::generateTree(unsigned rankStructure, unsigned rankPermutation) {
  	//Get specified tree structure and permutation
+ 	std::cout << "rankStructure: " << rankStructure << " rankPermutation: " << rankPermutation << std::endl; 
  	std::vector<int> randomStructure = DyckGenerator::generateWord(relations.size()-1, rankStructure);		//relations.size()-1 == amount of inner nodes
  	std::vector<ASTNode*> randomPermutation = getPermutation(rankPermutation);		//get specific permutation of relations
 
