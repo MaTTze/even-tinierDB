@@ -1,12 +1,12 @@
 /*
- * QuickPickStrategy.hpp
+ * RepeatedRandomStrategy.hpp
  *
- *  Created on: June 24, 2013
+ *  Created on: June 26, 2013
  *      Author: jan
  */
 
-#ifndef REPEATEDQUICKPICKSTRATEGY_HPP_
-#define REPEATEDQUICKPICKSTRATEGY_HPP_
+#ifndef REPEATEDRANDOMSTRATEGY_HPP_
+#define REPEATEDRANDOMSTRATEGY_HPP_
 #include "../ast/ASTNode.hpp"
 #include "../querygraph/QueryGraph.hpp"
 #include "QuickPickTree.hpp"
@@ -14,14 +14,14 @@
 #include <random>
 #include <vector>
 
-class RepeatedQuickPickStrategy: public OrderStrategy {
+class RepeatedRandomStrategy: public OrderStrategy {
 public:
-	RepeatedQuickPickStrategy();
-	virtual ~RepeatedQuickPickStrategy();
+	RepeatedRandomStrategy();
+	virtual ~RepeatedRandomStrategy();
 	virtual ASTNode* generateJoinTree(QueryGraph, std::vector<ASTNode*>&);
 private:
 	static const unsigned repetitions = 100;
 };
 
 
-#endif /* REPEATEDQUICKPICKSTRATEGY_HPP_ */
+#endif /* REPEATEDRANDOMSTRATEGY_HPP_ */

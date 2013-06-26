@@ -5,6 +5,7 @@
 #include "compiler/ast/ASTNode.hpp"
 #include "compiler/strategies/QuickPickStrategy.hpp"
 #include "compiler/strategies/RepeatedQuickPickStrategy.hpp"
+#include "compiler/strategies/RepeatedRandomStrategy.hpp"
 #include "compiler/SimpleExecutor.hpp"
 #include <iostream>
 //---------------------------------------------------------------------------
@@ -15,12 +16,13 @@ int main()
    Database db;
    db.open("data/tpch/tpch");
    Parser p = Parser(&db);
-   std::string qry = "select * from orders o, lineitem l, customer c, customer c2, orders k where o.o_orderkey=l.l_orderkey and k.o_custkey=c2.c_custkey and o.o_custkey=c.c_custkey and and c2.c_nationkey=c.c_nationkey c.c_name=Customer#000014993";
+   std::string qry = "select * from orders o, lineitem l, customer c, customer c2, orders k where o.o_orderkey=l.l_orderkey and k.o_custkey=c2.c_custkey and o.o_custkey=c.c_custkey and c2.c_nationkey=c.c_nationkey and c.c_name=Customer#000014993";
    std::cout << "Parsing query: " << qry << std::endl;
    Query query = p.parse(qry);
    std::cout << "Parsed." << std::endl;
    //QuickPickStrategy s = QuickPickStrategy();
-   RepeatedQuickPickStrategy s = RepeatedQuickPickStrategy();
+   //RepeatedQuickPickStrategy s = RepeatedQuickPickStrategy();
+   RepeatedRandomStrategy s = RepeatedRandomStrategy();
    Compiler c = Compiler(&s);
    ASTNode* tree = c.compile(query);
    std::cout << qry << std::endl;
