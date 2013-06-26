@@ -1,0 +1,180 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+\PassOptionsToPackage{fleqn}{amsmath}
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{graphicx}
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\normalfont\scshape} % Make all sections centered, the default font and small caps
+
+\usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usetikzlibrary{automata,positioning}
+\usetikzlibrary{arrows,calc,fit}
+\usepackage{latexsym}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{ulem}
+\usepackage{amssymb}
+\usepackage{longtable}
+ \usepackage{array}
+
+\usepackage[compact]{titlesec}
+\titlespacing{\section}{0pt}{*10}{*1} % Spacing between sections
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{0pt} % Customize the height of the header
+\usepackage{fullpage}
+\usepackage{hyperref}
+
+
+\usepackage{amsmath}
+\setlength{\mathindent}{25.0pt}
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+\def\ojoin{\setbox0=\hbox{$\Join$}%
+  \rule[+0.095ex]{.3em}{.5pt}\llap{\rule[1.35ex]{0.3em}{0.5pt}}}
+\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
+\def\rightouterjoin{\mathbin{\Join\mkern-5.8mu\ojoin}}
+\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\Join\mkern-5.8mu\ojoin}}
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Technische Universit\"at M\"unchen, Query Optimization} \\ [25pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Exercise 8 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Matthias Gollwitzer, Jan Schalkamp} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+\lstset{language=SQL}
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section{Exercise 1}
+
+\section{Exercise 2}
+
+\section{Exercise 3}
+Figure \ref{qg} depicts the chosen query graph, with relations cardinality is $\forall R_i: |R_i|=10$. Our rule set consists of the following rules: 
+\begin{itemize}
+	\item Commutativity:	$R_1 \Join R_2 \leadsto R_2 \Join R_1$
+	\item Left Join Echange: $(R_1\Join R_2) \Join R_3 \leadsto (R_1\Join R_3) \Join R_2$
+\end{itemize}
+Furthermore Figures \ref{start solution} and \ref{optimalsolution} show the chosen start and the optimal solution. As both rules applied to the start solution yield no improvement, the optimal solution will never be found.
+
+\begin{figure}[H]
+	\centering
+		\tikzstyle{b} = [text centered, thick]
+		%\tikzstyle{c} = [rectangle, draw]
+		\tikzstyle{l} = [draw, -latex',thick]  
+
+\begin{tikzpicture}[-,auto,scale=1.25]
+    \node [b]    (r1) {$R_1$};
+    \node [b]    (r2)   at ([shift={(1,0)}] r1) {$R_2$};
+    \node [b]    (r3)   at ([shift={(1,0.5)}] r2) {$R_3$};
+    \node [b]    (r4)   at ([shift={(1,-0.5)}] r2) {$R_4$};
+    
+    
+    
+    \draw[-] (r1) edge node[below,pos=0.5,font={\sffamily\tiny}] {0.5}(r2);
+    \draw[-] (r2) edge node[above,pos=0.5,font={\sffamily\tiny}] {0.5}(r3);
+    \draw[-] (r2) edge node[below,pos=0.5,font={\sffamily\tiny}] {0.5} (r4);
+    \draw[-] (r3) edge node[right,pos=0.5,font={\sffamily\tiny}] {0.1} (r4);
+
+\end{tikzpicture}
+	\caption{Example Query Graph}
+	  \label{qg}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+	\begin{tikzpicture}
+	\tikzset{level distance=40pt, sibling distance=10pt}
+	
+	\Tree
+	[.{$\Join (125)$}
+		[.{$\Join (100)$} 
+			[.{$\Join (100)$}
+				[.{1} ]
+				[.{4} ]
+			]
+			[.{3} ]
+		]
+		[.{2} ]
+	]
+	\end{tikzpicture}
+\caption{Start solution}
+  \label{startsolution}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+	\begin{tikzpicture}
+	\tikzset{level distance=40pt, sibling distance=10pt}
+	
+	\Tree
+	[.{$\Join (125)$}
+		[.{$\Join (25)$} 
+			[.{$\Join (10)$}
+				[.{3} ]
+				[.{4} ]
+			]
+			[.{2} ]
+		]
+		[.{1} ]
+	]
+	\end{tikzpicture}
+\caption{Optimal solution}
+  \label{optimalsolution}
+\end{figure}
+
+
+\end{document}
