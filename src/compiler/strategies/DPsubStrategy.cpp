@@ -81,6 +81,7 @@ ASTNode* DPsubStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTN
 
 			//Print DP-TABLE
 			//std::cout << "DPsub: Subsets in integer representation are: " << i1 << " - " << i2 << std::endl;
+			/*
 			printSubsets(&querygraph, i1, i2);
 			std::cout << "DPsub: Resulting join tree is: " << std::endl;
 			if (dpTable.at(i).first == nullptr)
@@ -88,6 +89,7 @@ ASTNode* DPsubStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTN
 			else 
 				ASTPrinter::print(dpTable.at(i).first);
 			std::cout << "-------------" << std::endl;
+			*/
 
 
 			i1 = i&(i1 - i);

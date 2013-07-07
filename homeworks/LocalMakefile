@@ -22,8 +22,11 @@ bin/homework7-1b$(EXEEXT): bin/homeworks/homework7-1b.o $(obj)
 bin/homework7-2$(EXEEXT): bin/homeworks/homework7-2.o $(obj)
 	$(BUILDEXE)
 
-bin/homework8$(EXEEXT): bin/homeworks/homework8.o $(obj)
+bin/homework8-1$(EXEEXT): bin/homeworks/homework8-1.o $(obj)
+	$(BUILDEXE)
+
+bin/homework8-2$(EXEEXT): bin/homeworks/homework8-2.o $(obj)
 	$(BUILDEXE)
 
 # Alias for all examples
-homeworks_bin: bin/homework1-1a$(EXEEXT) bin/homework1-1b$(EXEEXT) bin/homework1-2$(EXEEXT) bin/homework3$(EXEEXT) bin/homework5$(EXEEXT) bin/homework7-1$(EXEEXT)  bin/homework7-1b$(EXEEXT) bin/homework7-2$(EXEEXT) bin/homework8$(EXEEXT)
+homeworks_bin: bin/homework1-1a$(EXEEXT) bin/homework1-1b$(EXEEXT) bin/homework1-2$(EXEEXT) bin/homework3$(EXEEXT) bin/homework5$(EXEEXT) bin/homework7-1$(EXEEXT)  bin/homework7-1b$(EXEEXT) bin/homework7-2$(EXEEXT) bin/homework8-1$(EXEEXT) bin/homework8-2$(EXEEXT)

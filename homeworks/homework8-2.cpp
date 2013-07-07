@@ -20,9 +20,9 @@ int main()
    std::cout << "Parsing query: " << qry << std::endl;
    Query query = p.parse(qry);
    std::cout << "Parsed." << std::endl;
-   //QuickPickStrategy s = QuickPickStrategy();
-   //RepeatedQuickPickStrategy s = RepeatedQuickPickStrategy();
-   RepeatedRandomStrategy s = RepeatedRandomStrategy();
+
+   RepeatedQuickPickStrategy s = RepeatedQuickPickStrategy();
+
    Compiler c = Compiler(&s);
    ASTNode* tree = c.compile(query);
    std::cout << qry << std::endl;

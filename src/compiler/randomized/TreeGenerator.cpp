@@ -35,7 +35,6 @@ ASTNode* TreeGenerator::generateRandomTree() {
 
 ASTNode* TreeGenerator::generateTree(unsigned rankStructure, unsigned rankPermutation) {
  	//Get specified tree structure and permutation
- 	std::cout << "rankStructure: " << rankStructure << " rankPermutation: " << rankPermutation << std::endl; 
  	std::vector<int> randomStructure = DyckGenerator::generateWord(relations.size()-1, rankStructure);		//relations.size()-1 == amount of inner nodes
  	std::vector<ASTNode*> randomPermutation = getPermutation(rankPermutation);		//get specific permutation of relations
 
@@ -59,7 +58,7 @@ ASTNode* TreeGenerator::generateJoin(std::vector<int> structure, std::vector<AST
 	unsigned lastVal = 1;		//Store last value of the structure list
 	bool left = true;			//Are we handling the left side of the structure?
 	unsigned breakpoint = permutation.size();		//At which point begins the right subtree in the structure?
-	unsigned maxOpen = ((relations.size()-1)*2)-1;		//Last position at which a right subtree might occur
+	unsigned maxOpen = (structure.size()*2)-1;		//Last position at which a right subtree might occur
 
 	for(unsigned i = 0; i < structure.size(); i++) {		//iterate over the DyckWord
 		unsigned diff = structure.at(i) - lastVal;			//difference between current value in structure and last read
@@ -82,7 +81,7 @@ ASTNode* TreeGenerator::generateJoin(std::vector<int> structure, std::vector<AST
 	for(unsigned i = breakpoint; i < permutation.size(); i++)	//add correct amount of relations to the right subtree.
 		rightPermutation.push_back(permutation.at(i));
 
-	if(breakpoint == permutation.size()) {		//most likely legacy code. Too brainfucked right now to verify. Does no harm.
+	if(breakpoint == permutation.size()) {		//most likely legacy code (replaced by maxOpen). Too brainfucked right now to verify. Does no harm.
 		rightPermutation.push_back(leftPermutation.back());
 		leftPermutation.pop_back();
 	}

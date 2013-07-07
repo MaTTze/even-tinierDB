@@ -98,9 +98,25 @@
 %	PROBLEM 1
 %----------------------------------------------------------------------------------------
 
+Exercise 1+2: Make as usual via \textit{make} command. TPCH data is again expected in \textit{data/tpch/tpch} with semicolons only as delimiter and no other occurrences of them.
 \section{Exercise 1}
+	\begin{itemize}
+		\item Execute via \textbf{./bin/homework8-1}
+		\item \textbf{src/compiler/randomized/TreeGenerator::generateRandomTree:} Responsible for generating trees with a random rank for structure and permutation of relations. TreeGenerator::generateRandomTree utilizes a Marsenne twister to generate pseudo-random numbers. For the structure rank, this will be a (uniformly distributed) random number between 0 and $C(|\text{Joins}| - 1)$ with C as Catalan number. The rank of the permutation of relations will be between 0 and $(|\text{relations}|)!$. 
+		\item \textbf{src/compiler/randomized/TreeGenerator::generateJoin:} The fun part of this class. Builds the corresponding tree to a given structure/permutation recursively. The idea is, that we can see where in the structure list the right sub tree begins. This is \textit{generally} the case, if the difference between two consecutive values is bigger than the index of the "right" value. An example: $\text{structure} := <1,2,5,6>$. Here $<1,2>$ belongs to the left sub tree (since $2-1=1$ is less/equal to the index of $<2>$ -- which is 1) and $<5,6>$ to the right sub tree (as $5-2=3$ is bigger than the index of $<5>$ -- which is 2). From these derived sub lists, we build new valid structure lists. Therefore the left list will be change as follows: the head will be deleted -- as it was the one depicting the topmost join -- and all values will be decreased by 1. The right list keeps all it's elements, but their values will be decreased by $(b+1)$ -- with $b$ being the index in the original structure list of the first element that belongs to the right sub tree. In our example, the two new structure lists will be: $<1>$ and $<1,2>$. 
+		There is one special case worth mentioning (hence the \textit{generally} earlier). The following example with it's specific length and values might even be the single case, which is not covered by our general rule. Consider the structure $<1,2,4,7>$. Here, each difference between two consecutive values is exactly the index of the bigger value, wherefore our rule would assume that there is no right side. One can see quite easily, that there should indeed be a right side, as $7$ is the latest possible occurrence of an opening bracket in a dyck word with length 4 (and has therefore to be in the right sub tree). Our algorithm checks therefore additionally for the occurrence of the last possible opening bracket ($\text{structure length}*2-1$) and then handles it as the right sub tree\footnote{maxOpen is the variable used for this check}.  
+		\item \textbf{src/compiler/CostCalculator:} Calculates the cost for a given tree and query graph.
+		\item \textbf{src/compiler/strategies/RepeatedRandomStrategy:} Executes TreeGenerator::generateRandomTree multiple times (amount specified in the header file -- currently 100) evaluates the returned tree's cost via CostCalculator::getCosts and returns the cheapest one. Also maintains the distribution of occurred costs as a map from cost(double) to occurrences(unsigned).
+	\end{itemize}
 
 \section{Exercise 2}
+	\begin{itemize}
+		\item Execute via \textbf{./bin/homework8-2}
+		\item \textbf{src/compiler/strategies/QuickPickTree:} Entrypoint of data structure for storing partial solutions. Header file implements the structure \textit{QPNode}. To store intermediate results we use a reversed tree structure. Each node has a pointer either to the parent node or, in case of a root, to the intermediate AST tree. For each relation we maintain a node in a vector with the relation number used as index. This way it is not necessary to update each affected relation node when joining two subtrees.
+		\item \textbf{src/compiler/strategies/QuickPickStrategy:} Creates a random join tree by randomly converting edges of the query graph to joins in the AST. Uses Marsenne twister for random edge selection, too. 
+		\item \textbf{src/compiler/strategies/RepeatedQuickPickStrategy:} Executes QuickPickStrategy multiple times (amount specified in the header file -- currently 100) evaluates the returned tree's cost via CostCalculator::getCosts and returns the cheapest one. Also maintains the distribution of occurred costs as a map from cost(double) to occurrences(unsigned).
+
+	\end{itemize}
 
 \section{Exercise 3}
 Figure \ref{qg} depicts the chosen query graph, with relations cardinality is $\forall R_i: |R_i|=10$. Our rule set consists of the following rules: 
@@ -108,7 +124,7 @@ Figure \ref{qg} depicts the chosen query graph, with relations cardinality is $\
 	\item Commutativity:	$R_1 \Join R_2 \leadsto R_2 \Join R_1$
 	\item Left Join Echange: $(R_1\Join R_2) \Join R_3 \leadsto (R_1\Join R_3) \Join R_2$
 \end{itemize}
-Furthermore Figures \ref{start solution} and \ref{optimalsolution} show the chosen start and the optimal solution. As both rules applied to the start solution yield no improvement, the optimal solution will never be found.
+Furthermore Figures \ref{startsolution} and \ref{optimalsolution} show the chosen start and the optimal solution. As both rules applied to the start solution yield no improvement, the optimal solution will never be found.
 
 \begin{figure}[H]
 	\centering

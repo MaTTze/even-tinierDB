@@ -19,11 +19,17 @@ RepeatedQuickPickStrategy::~RepeatedQuickPickStrategy() {
 }
 
 ASTNode* RepeatedQuickPickStrategy::generateJoinTree(QueryGraph querygraph,	std::vector<ASTNode*>& relations) {
+
+	std::cout << "Compiler: Running repeated QuickPick strategy" << std::endl;
+
+
 	ASTNode* n;
 	ASTNode* best;
 	double bestCost = std::numeric_limits<double>::max();
-	std::map<double, unsigned> distribution;
+	std::map<double, unsigned> distribution;		//map to store cost distribution (key=cost, val=occurrences)
+	
 	QuickPickStrategy s = QuickPickStrategy();
+
 	for (unsigned i = 0; i < repetitions; i++){
 		n = s.generateJoinTree(querygraph, relations);
 		double cost = CostCalculator::getCosts(n, &querygraph);
@@ -33,9 +39,14 @@ ASTNode* RepeatedQuickPickStrategy::generateJoinTree(QueryGraph querygraph,	std:
 			bestCost = cost;
 		}
 	}
+
+	std::cout << "-----------------------" << std::endl;
+	std::cout << "Cost distribution:" << std::endl;
 	for (auto it = distribution.begin(); it != distribution.end(); it++){
-		std::cout << "cost: " << it->first << " occurrences: " << it->second << std::endl;
+		printf("cost: %.2F | occurrences: %d\n", it->first, it->second); 
 	}
+	std::cout << "-----------------------" << std::endl;
+
 	return best;
 }
 
