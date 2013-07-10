@@ -5,4 +5,5 @@ bin/*
 *.aux
 *.log
 *.gz
+*.zip
 data/tpch/*
